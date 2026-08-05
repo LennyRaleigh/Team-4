@@ -25,21 +25,21 @@ class Background(pygame.sprite.Sprite): #makes backround and moves everything wh
         for spr in all_sprites:
             if spr != player:
                 if hasattr(spr, "rect"):
-                    if player.rect.centerx < 250:
+                    if player.rect.centerx < WINDOW_WIDTH* 0.33:
                         spr.rect.centerx += player.speed * dt
-                    if player.rect.centerx > WINDOW_WIDTH - 250:
+                    if player.rect.centerx > WINDOW_WIDTH*0.66:
                         spr.rect.centerx -= player.speed * dt
-                    if player.rect.centery < 250:
+                    if player.rect.centery < WINDOW_HEIGHT *0.33:
                         spr.rect.centery += player.speed * dt
-                    if player.rect.centery > WINDOW_HEIGHT - 250:
+                    if player.rect.centery > WINDOW_HEIGHT * 0.66:
                         spr.rect.centery -= player.speed * dt
-        if player.rect.centerx < 250:
+        if player.rect.centerx < WINDOW_WIDTH *0.33:
             player.rect.centerx += player.speed * dt
-        if player.rect.centerx > WINDOW_WIDTH - 250:
+        if player.rect.centerx > WINDOW_WIDTH * 0.66:
             player.rect.centerx -= player.speed * dt
-        if player.rect.centery < 250:
+        if player.rect.centery < WINDOW_HEIGHT * 0.33:
             player.rect.centery += player.speed * dt
-        if player.rect.centery > WINDOW_HEIGHT - 250:
+        if player.rect.centery > WINDOW_HEIGHT *0.66:
             player.rect.centery -= player.speed * dt
 
 
