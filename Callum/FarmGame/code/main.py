@@ -16,7 +16,7 @@ class Player(pygame.sprite.Sprite):
         self.direction = self.direction.normalize() if self.direction else self.direction
         self.rect.center += self.direction * self.speed * dt
 
-class Background(pygame.sprite.Sprite):
+class Background(pygame.sprite.Sprite): #makes backround and moves everything when player moves too far
     def __init__(self, surf, groups):
         super().__init__(groups)
         self.image = surf
@@ -43,7 +43,7 @@ class Background(pygame.sprite.Sprite):
             player.rect.centery -= player.speed * dt
 
 
-class YAwareGroup(pygame.sprite.Group):
+class YAwareGroup(pygame.sprite.Group): #draws sprites under or over others depending on y coord
     def by_y(self, spr):
         return spr.rect.centery
 
@@ -54,7 +54,7 @@ class YAwareGroup(pygame.sprite.Group):
             self.spritedict[spr] = surface_blit(spr.image, spr.rect)
         self.lostsprites = []
 
-class Enemies(pygame.sprite.Sprite):
+class Enemies(pygame.sprite.Sprite): #placeholder replace with fully made enemy class
     def __init__(self, groups):
         super().__init__(groups)
         self.image = pygame.image.load("Callum/FarmGame/images/rabbit-pixilart.png").convert_alpha()
@@ -72,9 +72,9 @@ running = True
 background_surf = pygame.image.load("Callum/FarmGame/images/background.png").convert_alpha()
 all_sprites = pygame.sprite.Group()
 player = Player(all_sprites)
-background = Background(background_surf,all_sprites)
+background = Background(background_surf,all_sprites) #replace background_surf with current level background
 placehold = Enemies(all_sprites)
-sprites = YAwareGroup((player,placehold))
+sprites = YAwareGroup((player,placehold)) # place any class of object into here EXCEPT background
 
 
 while running:
@@ -85,8 +85,6 @@ while running:
 
     display_surface.fill("#2FC66B")
     display_surface.blit(background.image,background.rect)
-    #all_sprites.draw(display_surface)
-    #display_surface.blit(player.image,player.rect)
     background.move_bg(player,dt)
     sprites.draw(display_surface)
     all_sprites.update(dt)
