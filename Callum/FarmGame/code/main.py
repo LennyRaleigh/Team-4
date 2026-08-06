@@ -4,17 +4,29 @@ from os.path import join
 class Player(pygame.sprite.Sprite):
     def __init__(self, groups):
         super().__init__(groups)
-        self.image = pygame.image.load("Callum/FarmGame/images/rabbit-pixilart.png").convert_alpha()
-        self.image = pygame.transform.scale_by(self.image,2)
+        self.right_image = pygame.image.load("FarmGame/images/rabbit-pixilart.png").convert_alpha()
+        self.right_image = pygame.transform.scale_by(self.right_image,2)
+        self.image = self.right_image
         self.rect = self.image.get_frect(center = (WINDOW_WIDTH/2,WINDOW_HEIGHT/2))
         self.direction = pygame.math.Vector2()
         self.speed = 600
+        self.going_right = True
     def update(self,dt):
         keys = pygame.key.get_pressed()
         self.direction.x = int(keys[pygame.K_d]) - int(keys[pygame.K_a])
         self.direction.y = int(keys[pygame.K_s]) - int(keys[pygame.K_w])
         self.direction = self.direction.normalize() if self.direction else self.direction
         self.rect.center += self.direction * self.speed * dt
+        self.surf_direction()
+    def surf_direction(self):
+        if self.going_right:
+            self.image = self.right_image
+        else:
+            self.image = pygame.transform.flip(self.right_image,True,False)
+        if self.direction.x < 0:
+            self.going_right = False
+        elif self.direction.x > 0:
+            self.going_right = True
 
 class Background(pygame.sprite.Sprite): #makes backround and moves everything when player moves too far
     def __init__(self, surf, groups):
@@ -57,8 +69,8 @@ class YAwareGroup(pygame.sprite.Group): #draws sprites under or over others depe
 class Enemies(pygame.sprite.Sprite): #placeholder replace with fully made enemy class
     def __init__(self, groups):
         super().__init__(groups)
-        self.image = pygame.image.load("Callum/FarmGame/images/rabbit-pixilart.png").convert_alpha()
-        self.image = pygame.transform.scale_by(self.image,2)
+        self.image = pygame.image.load("Callum/FarmGame/images/Tree.png").convert_alpha()
+        self.image = pygame.transform.scale_by(self.image,1)
         self.rect = self.image.get_frect(center = (WINDOW_WIDTH/2,WINDOW_HEIGHT/2))
 
 
@@ -69,7 +81,7 @@ pygame.display.set_caption("Farm Game")
 clock = pygame.time.Clock()
 running = True
 
-background_surf = pygame.image.load("Callum/FarmGame/images/background.png").convert_alpha()
+background_surf = pygame.image.load("FarmGame/images/background.png").convert_alpha()
 all_sprites = pygame.sprite.Group()
 player = Player(all_sprites)
 background = Background(background_surf,all_sprites) #replace background_surf with current level background
