@@ -73,33 +73,33 @@ class Enemies(pygame.sprite.Sprite): #placeholder replace with fully made enemy 
         self.image = pygame.transform.scale_by(self.image,1)
         self.rect = self.image.get_frect(center = (WINDOW_WIDTH/2,WINDOW_HEIGHT/2))
 
+if __name__ == "__main__" :
+    pygame.init()
+    WINDOW_WIDTH, WINDOW_HEIGHT =1280, 720
+    display_surface = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT))
+    pygame.display.set_caption("Farm Game")
+    clock = pygame.time.Clock()
+    running = True
 
-pygame.init()
-WINDOW_WIDTH, WINDOW_HEIGHT =1280, 720
-display_surface = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT))
-pygame.display.set_caption("Farm Game")
-clock = pygame.time.Clock()
-running = True
-
-background_surf = pygame.image.load("FarmGame/images/background.png").convert_alpha()
-all_sprites = pygame.sprite.Group()
-player = Player(all_sprites)
-background = Background(background_surf,all_sprites) #replace background_surf with current level background
-placehold = Enemies(all_sprites)
-sprites = YAwareGroup((player,placehold)) # place any class of object into here EXCEPT background
+    background_surf = pygame.image.load("FarmGame/images/background.png").convert_alpha()
+    all_sprites = pygame.sprite.Group()
+    player = Player(all_sprites)
+    background = Background(background_surf,all_sprites) #replace background_surf with current level background
+    placehold = Enemies(all_sprites)
+    sprites = YAwareGroup((player,placehold)) # place any class of object into here EXCEPT background
 
 
-while running:
-    dt = clock.tick()/1000
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    while running:
+        dt = clock.tick()/1000
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
-    display_surface.fill("#2FC66B")
-    display_surface.blit(background.image,background.rect)
-    background.move_bg(player,dt)
-    sprites.draw(display_surface)
-    all_sprites.update(dt)
-    pygame.display.update()
-pygame.quit()
+        display_surface.fill("#2FC66B")
+        display_surface.blit(background.image,background.rect)
+        background.move_bg(player,dt)
+        sprites.draw(display_surface)
+        all_sprites.update(dt)
+        pygame.display.update()
+    pygame.quit()
 
