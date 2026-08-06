@@ -9,15 +9,15 @@ pygame.display.set_caption('Game')
 
 
 # load the background image
-background = pygame.image.load(join('images', 'background.png'))
+background = pygame.image.load(join('FarmGame', 'images', 'background.png'))
 
 # resize it to fit the window
 background = pygame.transform.scale(background, (WINDOW_WIDTH, WINDOW_HEIGHT))
 
-player = pygame.image.load(join('images', 'player.png'))
+player = pygame.image.load(join('FarmGame', 'images', 'rabbit.png'))
 player = pygame.transform.scale(player, (100, 100))
 
-farmer = pygame.image.load(join('images', 'farmer.png'))
+farmer = pygame.image.load(join('FarmGame', 'images', 'farmer.png'))
 farmer = pygame.transform.scale(farmer, (300, 300))
 
 # starting position
