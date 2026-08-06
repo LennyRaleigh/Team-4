@@ -8,7 +8,7 @@ class Player(pygame.sprite.Sprite):
         self.right_image = pygame.image.load("FarmGame/images/rabbit-pixilart.png").convert_alpha()
         self.right_image = pygame.transform.scale_by(self.right_image,2)
         self.image = self.right_image
-        self.rect = self.image.get_frect(center = (1280/2,720/2))
+        self.rect = self.image.get_frect(center = (WINDOW_WIDTH/2,WINDOW_HEIGHT/2) if __name__ == "__main__" else (1280/2,720/2))
         self.direction = pygame.math.Vector2()
         self.speed = 600
         self.going_right = True
@@ -33,7 +33,7 @@ class Background(pygame.sprite.Sprite): #makes backround and moves everything wh
     def __init__(self, surf, groups):
         super().__init__(groups)
         self.image = surf
-        self.rect = self.image.get_frect(center = (WINDOW_WIDTH/2,WINDOW_HEIGHT/2))
+        self.rect = self.image.get_frect(center = (WINDOW_WIDTH/2,WINDOW_HEIGHT/2) if __name__ == "__main__" else (1280/2,720/2))
     def move_bg(self,player,dt):
         for spr in all_sprites:
             if spr != player:
