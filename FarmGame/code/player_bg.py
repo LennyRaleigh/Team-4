@@ -7,7 +7,7 @@ class Player(pygame.sprite.Sprite):
         self.right_image = pygame.image.load("FarmGame/images/rabbit-pixilart.png").convert_alpha()
         self.right_image = pygame.transform.scale_by(self.right_image,2)
         self.image = self.right_image
-        self.rect = self.image.get_frect(center = (WINDOW_WIDTH/2,WINDOW_HEIGHT/2))
+        self.rect = self.image.get_frect(center = (pygame.display.get_surface().get_size()/2))
         self.direction = pygame.math.Vector2()
         self.speed = 600
         self.going_right = True
