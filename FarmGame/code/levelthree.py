@@ -1,7 +1,7 @@
+print("FILE STARTED")
 import pygame
 from os.path import join
 from player_bg import Player
-import math
 
 # general setup
 pygame.init()
@@ -20,51 +20,49 @@ background = pygame.transform.scale(background, (WINDOW_WIDTH, WINDOW_HEIGHT))
 farmer = pygame.image.load(join('FarmGame', 'images', 'farmer.png'))
 farmer = pygame.transform.scale(farmer, (300, 300))
 
-player_x = 400
-player_y = 477
 
-player_width = 25
-player_height = 25
-
-player_x = max(0, min(player_x, WINDOW_WIDTH - player_width))
-player_y = max(0, min(player_y, WINDOW_HEIGHT - player_height))
-
-
-farmer_x = 1000
-farmer_y = 275
 running = True
-farmer_speed = 0.5
-
+farmer_speed = 100
 
 player = Player(pygame.sprite.Group())
 # starting position
 player.rect.centerx = 400
 player.rect.centery = 500
 
+farmer_rect = farmer.get_rect(center=(1000, 275))
 
+
+print("Starting Game")
 while running:
-    dt = clock.tick()/1000
-    # event loop
+    dt = clock.tick(60) / 1000
+    print("loop running")
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    # update the player
+   
+
+    # Update player first
     player.update(dt)
+    print(player.rect.center)
 
-    #Keep the player within the window boundaries
+    # Keep player inside the window
     player.rect.clamp_ip(screen.get_rect())
+    # Make farmer follow player
+    direction = pygame.Vector2(player.rect.center) - farmer_rect.center
 
-    screen.fill((30, 30 ,30))
+    if direction.length() > 0:
+        direction = direction.normalize()
+        farmer_rect.center += direction * farmer_speed * dt
 
-
-    # draw the background image
-    screen.blit(background, (0,0))
-
-    # draw the player image
-    screen.blit(player.image, (player.rect))
-    screen.blit(farmer, (farmer_x, farmer_y))
+    # Draw
+    screen.fill((30, 30, 30))
+    screen.blit(background, (0, 0))
+    screen.blit(player.image, player.rect)
+    screen.blit(farmer, farmer_rect)
 
     pygame.display.update()
+
+    print(farmer_rect.center, player.rect.center)
 
 pygame.quit()
