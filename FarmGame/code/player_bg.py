@@ -64,6 +64,7 @@ class YAwareGroup(pygame.sprite.Group): #draws sprites under or over others depe
         sprites = self.sprites()
         surface_blit = surface.blit
         for spr in sorted(sprites, key=self.by_y):
+            print("u")
             self.spritedict[spr] = surface_blit(spr.image, spr.rect)
         self.lostsprites = []
 

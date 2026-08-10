@@ -54,6 +54,8 @@ class Player(Creature):
         self.rect.center += self.direction * self.speed * dt
         self.surf_direction()
 
+        if pygame.mouse.get_just_pressed()[0]:
+            print("attack")
 
 class Background(pygame.sprite.Sprite): #makes backround and moves everything when player moves too far
     def __init__(self, surf, groups):
@@ -119,6 +121,17 @@ class Enemies(Creature): #placeholder replace with fully made enemy class
                         sprite1.rect.centerx += (sprite1.rect.centerx-sprite2.rect.centerx)**-1
                         sprite1.rect.centery += (sprite1.rect.centery-sprite2.rect.centery)**-1
 
+class Text(pygame.sprite.Sprite):
+    def __init__(self, font, pos, text, groups, is_button=False):
+        super().__init__(groups)
+        self.image = font.render(text,True,("#111314"))
+        self.rect = self.image.get_frect(midbottom = pos)
+        self.is_button = is_button
+
+        self.font =font
+        self.text = text
+    def highlight(self,hover):
+        self.image = self.font.render(self.text,True,"#111314","#FFFCFC" if hover else None)
 
 
 pygame.init()
@@ -127,28 +140,70 @@ display_surface = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT))
 pygame.display.set_caption("Farm Game")
 clock = pygame.time.Clock()
 running = True
+main_menu = True
 
 creature_sprites = pygame.sprite.Group()
+text_sprites = pygame.sprite.Group()
 background_surf = pygame.image.load("FarmGame/images/barn.png").convert_alpha()
+
+#Text
+menu_font = pygame.font.Font(None,60)
+button_font= pygame.font.Font(None,40)
+title = Text(menu_font,(WINDOW_WIDTH/2,150),"Borris The Bunny",text_sprites)
+play_button = Text(button_font,(WINDOW_WIDTH/2,300),"Play Game",text_sprites,True)
+settings_button = Text(button_font,(WINDOW_WIDTH/2,400),"Settings",text_sprites,True)
+quit_button = Text(button_font,(WINDOW_WIDTH/2,500),"Exit Game",text_sprites,True)
+
 player = Player((all_sprites,creature_sprites),pygame.image.load("FarmGame/images/rabbit.png").convert_alpha())
 background = Background(background_surf,all_sprites) #replace background_surf with current level background
-YAwareGroup(creature_sprites) # place any class of object into here EXCEPT background
-
 for x in range(3):
     Enemies((all_sprites,creature_sprites),pygame.image.load("FarmGame/images/Angry Pig.png").convert_alpha(),5,(random.randint(0, WINDOW_WIDTH),random.randint(0, WINDOW_HEIGHT)))
+sprites = YAwareGroup((creature_sprites)) # place any class of object into here EXCEPT background
+
+pygame.mouse.set_visible(False)
+cursor_img = pygame.image.load("FarmGame/images/cursor.png").convert_alpha()
+cursor_img = pygame.transform.scale_by(cursor_img,3)
+cursor_rect = cursor_img.get_frect(center = (WINDOW_WIDTH/2,WINDOW_HEIGHT/2))
+
 
 
 while running:
     dt = clock.tick()/1000
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
 
-    display_surface.fill("#2FC66B")
-    display_surface.blit(background.image,background.rect)
-    background.move_bg(player,dt)
-    creature_sprites.draw(display_surface)
-    all_sprites.update(dt)
+    for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                if pygame.key.get_just_pressed()[pygame.K_ESCAPE]:
+                    main_menu = True
+    if main_menu:
+        display_surface.fill("#A6D6EB")
+        text_sprites.draw(display_surface)
+
+        mouse_pos = pygame.mouse.get_pos()
+        mouse_button = pygame.mouse.get_just_pressed()
+
+        display_surface.blit(cursor_img,mouse_pos)
+
+        for button in text_sprites:
+            if button.is_button:
+                if button.rect.collidepoint(mouse_pos):
+                    button.highlight(True)
+                else:
+                    button.highlight(False)
+                
+        if play_button.rect.collidepoint(mouse_pos) and mouse_button[0] :
+            main_menu = False
+        
+        if quit_button.rect.collidepoint(mouse_pos) and mouse_button[0] :
+            running = False
+    
+    else:
+
+        display_surface.fill("#2FC66B")
+        display_surface.blit(background.image,background.rect)
+        background.move_bg(player,dt)
+        sprites.draw(display_surface)
+        all_sprites.update(dt)
     pygame.display.update()
 pygame.quit()
 
