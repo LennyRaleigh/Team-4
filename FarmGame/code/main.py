@@ -7,7 +7,7 @@ WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 720
 display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Borris the Bunny")
 
-background = pygame.image.load(join("images/level-2.png")).convert()
+background = pygame.image.load(join("images/level2.png")).convert()
 background = pygame.transform.scale(background, (WINDOW_WIDTH, WINDOW_HEIGHT))
 
 
@@ -24,7 +24,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         sheet = pygame.image.load(
-            join("images/sprite-64x64px-8f-sheet.png")
+            join("images\sprite-64x64px-8f-sheet.png")
         ).convert_alpha()
 
         self.frames_right = []
@@ -50,7 +50,7 @@ class Player(pygame.sprite.Sprite):
         self.is_moving = False
         self.frame_index = 0
         self.animation_timer = 0
-        self.animation_speed = 6 
+        self.animation_speed = 6  # lower = faster hopping
 
         self.image = self.frames_right[self.frame_index]
         self.rect = self.image.get_rect(topleft=(x, y))
@@ -68,7 +68,7 @@ class Player(pygame.sprite.Sprite):
         self.dodge_timer = 0
         self.dodge_cooldown = 0
 
-        self.attack_damage = 25
+        self.attack_damage = 15
         self.attack_range = 55
         self.attack_size = (55, 70)
         self.attacking = False
@@ -217,14 +217,14 @@ class Enemy:
         self.facing_right = True
         self.frame_index = 0
         self.animation_timer = 0
-        self.animation_speed = 8 
+        self.animation_speed = 8  # lower = faster bob
 
         self.image = self.frames_right[self.frame_index]
         self.rect = self.image.get_rect(topleft=(x, y))
         self.speed = 3
 
-        self.max_health = 150
-        self.health = 150
+        self.max_health = 100
+        self.health = 100
         self.hit_flash_timer = 0
 
     def take_damage(self, amount):
@@ -405,26 +405,69 @@ def draw_carrot_counter(surface, amount):
     surface.blit(text, (60, 85))
 
 
-player = Player(800, 500)
+def draw_game_over_screen(surface, carrots_collected):
+    overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.SRCALPHA)
+    overlay.fill((0, 0, 0, 170))
+    surface.blit(overlay, (0, 0))
 
-player_group = pygame.sprite.Group()
-player_group.add(player)
+    title_font = pygame.font.Font(None, 96)
+    info_font = pygame.font.Font(None, 40)
 
-enemies = [
-    Enemy(1100, 50),
-    Enemy(100, 50),
-    Enemy(1100, 600)
-]
+    title_text = title_font.render("GAME OVER", True, (220, 40, 40))
+    title_rect = title_text.get_rect(
+        center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 60)
+    )
+    surface.blit(title_text, title_rect)
 
-carrots = [
-    Carrot(200, 200),
-    Carrot(400, 100),
-    Carrot(600, 300),
-    Carrot(900, 200),
-    Carrot(300, 500),
-    Carrot(700, 600),
-    Carrot(1100, 400)
-]
+    carrots_text = info_font.render(
+        f"Carrots collected: {carrots_collected}/7",
+        True,
+        (255, 255, 255)
+    )
+    carrots_rect = carrots_text.get_rect(
+        center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 10)
+    )
+    surface.blit(carrots_text, carrots_rect)
+
+    prompt_text = info_font.render(
+        "Press R to Restart or ESC to Quit",
+        True,
+        (200, 200, 200)
+    )
+    prompt_rect = prompt_text.get_rect(
+        center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 60)
+    )
+    surface.blit(prompt_text, prompt_rect)
+
+
+def reset_game():
+    new_player = Player(800, 500)
+
+    new_player_group = pygame.sprite.Group()
+    new_player_group.add(new_player)
+
+    new_enemies = [
+        Enemy(1100, 50),
+        Enemy(100, 50),
+        Enemy(1100, 600)
+    ]
+
+    new_carrots = [
+        Carrot(200, 200),
+        Carrot(400, 100),
+        Carrot(600, 300),
+        Carrot(900, 200),
+        Carrot(300, 500),
+        Carrot(700, 600),
+        Carrot(1100, 400)
+    ]
+
+    return new_player, new_player_group, new_enemies, new_carrots
+
+
+player, player_group, enemies, carrots = reset_game()
+
+game_state = "playing"
 
 clock = pygame.time.Clock()
 
@@ -439,42 +482,53 @@ while running:
 
         if event.type == pygame.KEYDOWN:
 
-            if event.key == pygame.K_SPACE:
-                player.dodge()
+            if game_state == "playing":
+                if event.key == pygame.K_SPACE:
+                    player.dodge()
 
-            if event.key == pygame.K_j:
-                player.attack()
+                if event.key == pygame.K_RETURN:
+                    player.attack()
 
-    player.move()
-    player.update()
+            elif game_state == "game_over":
+                if event.key == pygame.K_r:
+                    player, player_group, enemies, carrots = reset_game()
+                    game_state = "playing"
 
-    for enemy in enemies:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
 
-        enemy.update(player, enemies)
+    if game_state == "playing":
 
-        if player.rect.colliderect(enemy.rect):
-
-            player.take_damage(1)
-
-            if player.health <= 0:
-                running = False
-
-    if player.attacking:
-        attack_rect = player.get_attack_rect()
+        player.move()
+        player.update()
 
         for enemy in enemies:
-            if enemy not in player.enemies_hit and attack_rect.colliderect(enemy.rect):
-                enemy.take_damage(player.attack_damage)
-                player.enemies_hit.append(enemy)
 
-    enemies = [enemy for enemy in enemies if enemy.health > 0]
+            enemy.update(player, enemies)
 
-    for carrot in carrots[:]:
+            if player.rect.colliderect(enemy.rect):
 
-        if player.rect.colliderect(carrot.rect):
+                player.take_damage(1)
 
-            player.carrots_collected += 1
-            carrots.remove(carrot)
+                if player.health <= 0:
+                    game_state = "game_over"
+
+        if player.attacking:
+            attack_rect = player.get_attack_rect()
+
+            for enemy in enemies:
+                if enemy not in player.enemies_hit and attack_rect.colliderect(enemy.rect):
+                    enemy.take_damage(player.attack_damage)
+                    player.enemies_hit.append(enemy)
+
+        enemies = [enemy for enemy in enemies if enemy.health > 0]
+
+        for carrot in carrots[:]:
+
+            if player.rect.colliderect(carrot.rect):
+
+                player.carrots_collected += 1
+                carrots.remove(carrot)
 
     display_surface.blit(background, (0, 0))
 
@@ -509,6 +563,9 @@ while running:
         display_surface,
         player.carrots_collected
     )
+
+    if game_state == "game_over":
+        draw_game_over_screen(display_surface, player.carrots_collected)
 
     pygame.display.update()
     clock.tick(60)
