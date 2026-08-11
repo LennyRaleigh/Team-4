@@ -2,7 +2,7 @@ import pygame
 
 WINDOW_WIDTH, WINDOW_HEIGHT = pygame.display.get_surface().get_size()
 
-pygame.window.get_
+
 class Background(pygame.sprite.Sprite): #makes backround and moves everything when player moves too far
     def __init__(self, surf, groups):
         super().__init__(groups)

@@ -1,4 +1,11 @@
 import pygame
+
+
+def give_variables(play,group):
+    global player, creature_sprites
+    player = play 
+    creature_sprites = group
+    
 from creature import Creature
 
 
@@ -27,3 +34,4 @@ class Enemies(Creature): #placeholder replace with fully made enemy class
                     if pygame.sprite.collide_mask(sprite1, sprite2,):
                         sprite1.rect.centerx += (sprite1.rect.centerx-sprite2.rect.centerx)**-1
                         sprite1.rect.centery += (sprite1.rect.centery-sprite2.rect.centery)**-1
+
