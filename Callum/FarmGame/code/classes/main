@@ -18,6 +18,7 @@ import menu
 from Enemy import Enemies, give_variables
 from Player import Player
 
+# Sprite groups
 all_sprites = pygame.sprite.Group()
 creature_sprites = pygame.sprite.Group()
 background_surf = pygame.image.load("FarmGame/images/barn.png").convert_alpha()
@@ -27,8 +28,12 @@ player = Player((all_sprites,creature_sprites),pygame.image.load("FarmGame/image
 background = Background(background_surf,all_sprites) #replace background_surf with current level background
 for x in range(3):
     Enemies((all_sprites,creature_sprites),pygame.image.load("FarmGame/images/Angry Pig.png").convert_alpha(),5,(random.randint(0, WINDOW_WIDTH),random.randint(0, WINDOW_HEIGHT)))
+
+# Another sprite group to draw sprites in order
 sprites = YAwareGroup((creature_sprites)) # place any class of object into here EXCEPT background
 
+
+# Mouse setup
 pygame.mouse.set_visible(False)
 cursor_img = pygame.image.load("FarmGame/images/cursor.png").convert_alpha()
 cursor_img = pygame.transform.scale_by(cursor_img,3)

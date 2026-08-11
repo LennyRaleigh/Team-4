@@ -37,7 +37,7 @@ settings_button = Text(button_font,(WINDOW_WIDTH/2,400),"Settings",text_sprites,
 quit_button = Text(button_font,(WINDOW_WIDTH/2,500),"Exit Game",text_sprites,True)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": #all code past this is just to mess around with without fucking main file up
 
 
 
