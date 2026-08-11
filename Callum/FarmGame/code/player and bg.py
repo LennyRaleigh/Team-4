@@ -29,14 +29,11 @@ class Creature(pygame.sprite.Sprite):
 class Player(Creature):
     def __init__(self, groups,image):
         super().__init__(groups,image)
-        #self.right_image = pygame.image.load("FarmGame/images/rabbit-pixilart.png").convert_alpha()
         self.right_image = pygame.transform.scale_by(self.right_image,2)
         self.image = self.right_image
         self.base_image = self. right_image
         self.rect = self.image.get_frect(center = (WINDOW_WIDTH/2,WINDOW_HEIGHT/2))
-        #self.direction = pygame.math.Vector2()
         self.speed = 600
-        #self.going_right = True
         self.hop = False
     def update(self,dt):
         keys = pygame.key.get_pressed()
@@ -57,15 +54,6 @@ class Player(Creature):
         self.rect.center += self.direction * self.speed * dt
         self.surf_direction()
 
-    #def surf_direction(self):
-    #    if self.going_right:
-    #        self.image = self.right_image
-    #    else:
-    #        self.image = pygame.transform.flip(self.right_image,True,False)
-    #    if self.direction.x < 0:
-    #        self.going_right = False
-    #    elif self.direction.x > 0:
-    #        self.going_right = True
 
 class Background(pygame.sprite.Sprite): #makes backround and moves everything when player moves too far
     def __init__(self, surf, groups):
@@ -108,7 +96,6 @@ class YAwareGroup(pygame.sprite.Group): #draws sprites under or over others depe
 class Enemies(Creature): #placeholder replace with fully made enemy class
     def __init__(self, groups,image,scale,pos):
         super().__init__(groups,image)
-        #self.image = pygame.image.load("Callum/FarmGame/images/Tree.png").convert_alpha()
         self.right_image = pygame.transform.scale_by(self.right_image,scale)
         self.image = self.right_image
         self.rect = self.image.get_frect(center = pos)

@@ -24,7 +24,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         sheet = pygame.image.load(
-            join("images\sprite-64x64px-8f-sheet.png")
+            join("images/rabbitSprite.png")
         ).convert_alpha()
 
         self.frames_right = []
@@ -50,7 +50,7 @@ class Player(pygame.sprite.Sprite):
         self.is_moving = False
         self.frame_index = 0
         self.animation_timer = 0
-        self.animation_speed = 6  # lower = faster hopping
+        self.animation_speed = 6
 
         self.image = self.frames_right[self.frame_index]
         self.rect = self.image.get_rect(topleft=(x, y))
@@ -508,7 +508,7 @@ while running:
 
             if player.rect.colliderect(enemy.rect):
 
-                player.take_damage(1)
+                player.take_damage(5)
 
                 if player.health <= 0:
                     game_state = "game_over"
