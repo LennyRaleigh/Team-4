@@ -2,10 +2,18 @@ import pygame
 from os.path import join
 
 pygame.init()
+pygame.mixer.init()
 
 WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 720
 display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Borris the Bunny")
+
+swoosh_sound = pygame.mixer.Sound(join("audio/universfield-swoosh-015-383769.mp3"))
+walk_sound = pygame.mixer.Sound(join("audio/joentnt-walk-on-grass-1-291984.mp3"))
+claw_sound = pygame.mixer.Sound(join("audio/daviddumaisaudio-small-monster-attack-195712.mp3"))
+game_over_sound = pygame.mixer.Sound(join("audio/lesiakower-8-bit-game-over-sound-effect-331435.mp3"))
+victory_sound = pygame.mixer.Sound(join("audio/Fortnite Victory Royale - QuickSounds.com.mp3"))
+walk_channel = pygame.mixer.Channel(0)
 
 background = pygame.image.load(join("images/level2.png")).convert()
 background = pygame.transform.scale(background, (WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -146,6 +154,7 @@ class Player(pygame.sprite.Sprite):
         if self.damage_cooldown <= 0 and not self.dodging:
             self.health -= amount
             self.damage_cooldown = 30
+            claw_sound.play()
 
     def update(self):
         if self.damage_cooldown > 0:
@@ -190,7 +199,7 @@ class Enemy:
     CELL_SIZE = 340
     DISPLAY_SIZE = (200, 200)
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, spawn_delay=0):
         sheet = pygame.image.load(
             join("images/fox-sheet.png")
         ).convert_alpha()
@@ -226,12 +235,17 @@ class Enemy:
         self.max_health = 100
         self.health = 100
         self.hit_flash_timer = 0
+        self.spawn_delay = spawn_delay * 60
 
     def take_damage(self, amount):
         self.health -= amount
         self.hit_flash_timer = 8
 
     def update(self, player, enemies):
+        if self.spawn_delay > 0:
+            self.spawn_delay -= 1
+            return
+
         direction = pygame.math.Vector2(
             player.rect.centerx - self.rect.centerx,
             player.rect.centery - self.rect.centery
@@ -405,7 +419,53 @@ def draw_carrot_counter(surface, amount):
     surface.blit(text, (60, 85))
 
 
-def draw_game_over_screen(surface, carrots_collected):
+def draw_timer(surface, seconds):
+    font = pygame.font.Font(None, 36)
+    mins = int(seconds) // 60
+    secs = int(seconds) % 60
+    text = font.render(f"{mins:02}:{secs:02}", True, (255, 255, 255))
+    rect = text.get_rect(topright=(WINDOW_WIDTH - 20, 20))
+    surface.blit(text, rect)
+
+
+def draw_level_complete_screen(surface, elapsed_seconds):
+    overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.SRCALPHA)
+    overlay.fill((0, 0, 0, 170))
+    surface.blit(overlay, (0, 0))
+
+    title_font = pygame.font.Font(None, 96)
+    info_font = pygame.font.Font(None, 40)
+
+    title_text = title_font.render("LEVEL COMPLETE!", True, (80, 220, 80))
+    title_rect = title_text.get_rect(
+        center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 60)
+    )
+    surface.blit(title_text, title_rect)
+
+    mins = int(elapsed_seconds) // 60
+    secs = int(elapsed_seconds) % 60
+    time_text = info_font.render(
+        f"Time: {mins:02}:{secs:02}",
+        True,
+        (255, 255, 255)
+    )
+    time_rect = time_text.get_rect(
+        center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 10)
+    )
+    surface.blit(time_text, time_rect)
+
+    prompt_text = info_font.render(
+        "Press ENTER to Continue or ESC to Quit",
+        True,
+        (200, 200, 200)
+    )
+    prompt_rect = prompt_text.get_rect(
+        center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 65)
+    )
+    surface.blit(prompt_text, prompt_rect)
+
+
+def draw_game_over_screen(surface, carrots_collected, elapsed_seconds):
     overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.SRCALPHA)
     overlay.fill((0, 0, 0, 170))
     surface.blit(overlay, (0, 0))
@@ -429,13 +489,25 @@ def draw_game_over_screen(surface, carrots_collected):
     )
     surface.blit(carrots_text, carrots_rect)
 
+    mins = int(elapsed_seconds) // 60
+    secs = int(elapsed_seconds) % 60
+    time_text = info_font.render(
+        f"Time survived: {mins:02}:{secs:02}",
+        True,
+        (255, 255, 255)
+    )
+    time_rect = time_text.get_rect(
+        center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 55)
+    )
+    surface.blit(time_text, time_rect)
+
     prompt_text = info_font.render(
         "Press R to Restart or ESC to Quit",
         True,
         (200, 200, 200)
     )
     prompt_rect = prompt_text.get_rect(
-        center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 60)
+        center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 100)
     )
     surface.blit(prompt_text, prompt_rect)
 
@@ -468,6 +540,7 @@ def reset_game():
 player, player_group, enemies, carrots = reset_game()
 
 game_state = "playing"
+alive_time = 0.0
 
 clock = pygame.time.Clock()
 
@@ -488,19 +561,38 @@ while running:
 
                 if event.key == pygame.K_RETURN:
                     player.attack()
+                    swoosh_sound.play()
 
             elif game_state == "game_over":
                 if event.key == pygame.K_r:
                     player, player_group, enemies, carrots = reset_game()
                     game_state = "playing"
+                    alive_time = 0.0
+
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+
+            elif game_state == "level_complete":
+                if event.key == pygame.K_RETURN:
+                    player, player_group, enemies, carrots = reset_game()
+                    game_state = "playing"
+                    alive_time = 0.0
 
                 if event.key == pygame.K_ESCAPE:
                     running = False
 
     if game_state == "playing":
 
+        alive_time += 1 / 60
+
         player.move()
         player.update()
+
+        if player.is_moving:
+            if not walk_channel.get_busy():
+                walk_channel.play(walk_sound, loops=-1)
+        else:
+            walk_channel.stop()
 
         for enemy in enemies:
 
@@ -512,6 +604,8 @@ while running:
 
                 if player.health <= 0:
                     game_state = "game_over"
+                    walk_channel.stop()
+                    game_over_sound.play()
 
         if player.attacking:
             attack_rect = player.get_attack_rect()
@@ -528,7 +622,13 @@ while running:
             if player.rect.colliderect(carrot.rect):
 
                 player.carrots_collected += 1
+                player.health = min(player.health + 5, player.max_health)
                 carrots.remove(carrot)
+
+        if not enemies and not carrots:
+            game_state = "level_complete"
+            walk_channel.stop()
+            victory_sound.play()
 
     display_surface.blit(background, (0, 0))
 
@@ -564,8 +664,13 @@ while running:
         player.carrots_collected
     )
 
+    draw_timer(display_surface, alive_time)
+
     if game_state == "game_over":
-        draw_game_over_screen(display_surface, player.carrots_collected)
+        draw_game_over_screen(display_surface, player.carrots_collected, alive_time)
+
+    if game_state == "level_complete":
+        draw_level_complete_screen(display_surface, alive_time)
 
     pygame.display.update()
     clock.tick(60)

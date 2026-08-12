@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Play — Borris the Bunny</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="Home">
+        <img src="../images/rabbit.png" alt="Borris" />
+        BORRIS THE BUNNY
+      </a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="gameplay.html">How to Play</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="breadcrumb-sep" aria-hidden="true">›</span>
+    <span>How to Play</span>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <header class="page-hero">
+    <div class="page-hero-content">
+      <h1 class="page-hero-title">HOW TO PLAY</h1>
+      <p class="page-hero-sub">Controls, mechanics, tips — everything you need to keep Borris alive.</p>
+    </div>
+  </header>
+
+  <main>
+    <!-- CONTROLS TABLE -->
+    <section class="section" aria-labelledby="controls-heading">
+      <h2 class="section-title" id="controls-heading">CONTROLS</h2>
+      <div class="section-divider"></div>
+      <p class="section-subtitle">Every action Borris can perform, mapped to your keyboard.</p>
+
+      <table class="controls-table" aria-label="Game controls">
+        <thead>
+          <tr>
+            <th scope="col">KEY</th>
+            <th scope="col">ACTION</th>
+            <th scope="col">NOTES</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="key-badge">W</span></td>
+            <td>Move Up</td>
+            <td>Borris runs north across the farm</td>
+          </tr>
+          <tr>
+            <td><span class="key-badge">A</span></td>
+            <td>Move Left</td>
+            <td>Sprite flips to face left automatically</td>
+          </tr>
+          <tr>
+            <td><span class="key-badge">S</span></td>
+            <td>Move Down</td>
+            <td>Borris runs south across the farm</td>
+          </tr>
+          <tr>
+            <td><span class="key-badge">D</span></td>
+            <td>Move Right</td>
+            <td>Sprite faces right automatically</td>
+          </tr>
+          <tr>
+            <td><span class="key-badge">SPACE</span></td>
+            <td>Dodge Roll</td>
+            <td>Speed burst — invincible during dodge frames. 60-frame cooldown.</td>
+          </tr>
+          <tr>
+            <td><span class="key-badge">ENTER</span></td>
+            <td>Attack</td>
+            <td>Melee strike in facing direction. 15 dmg, 30-frame cooldown.</td>
+          </tr>
+          <tr>
+            <td><span class="key-badge">R</span></td>
+            <td>Restart</td>
+            <td>Only active on the Game Over screen.</td>
+          </tr>
+          <tr>
+            <td><span class="key-badge">ESC</span></td>
+            <td>Quit</td>
+            <td>Exits the game from the Game Over screen.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- MECHANICS -->
+    <section class="section" aria-labelledby="mechanics-heading">
+      <h2 class="section-title" id="mechanics-heading">MECHANICS</h2>
+      <div class="section-divider"></div>
+
+      <div class="feature-row">
+        <div class="feature-img-wrap">
+          <img src="../images/carrot.png" alt="Carrot collectible" />
+        </div>
+        <div class="feature-text">
+          <h3 class="feature-title">CARROT COLLECTION</h3>
+          <p class="feature-desc">
+            Carrots are placed around each level at fixed positions. Simply walk
+            Borris into a carrot to collect it. A glowing aura surrounds each carrot to
+            help you spot them. The HUD in the top-left shows your current tally 
+           . Collect all to progress.
+          </p>
+        </div>
+      </div>
+
+      <div class="feature-row reverse">
+        <div class="feature-img-wrap">
+          <img src="../images/fox.png" alt="Fox enemy" />
+        </div>
+        <div class="feature-text">
+          <h3 class="feature-title">ENEMY AI</h3>
+          <p class="feature-desc">
+            The three foxes always know where Borris is and chase him using steering
+            vectors. They also push each other apart to avoid clumping, making them
+            harder to evade in a group. Contact with a fox drains <strong>5 HP</strong>
+            per hit, subject to a 30-frame invincibility window. A fox's health bar
+            appears above it once it takes any damage.
+          </p>
+        </div>
+      </div>
+
+      <div class="feature-row">
+        <div class="feature-img-wrap" style="font-size:3.5rem;">⚡</div>
+        <div class="feature-text">
+          <h3 class="feature-title">DODGE &amp; ATTACK COOLDOWNS</h3>
+          <p class="feature-desc">
+            Both the dodge and attack have cooldowns measured in game frames at 60 FPS.
+            The dodge cooldown is <strong>60 frames (~1 second)</strong> and lasts for
+            <strong>15 frames</strong>. The attack lasts <strong>12 frames</strong>
+            with a <strong>30-frame cooldown</strong>. Timing your dodge to pass through
+            a fox while it can't retaliate is the key skill in this game.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TIPS -->
+    <section class="section" aria-labelledby="tips-heading">
+      <h2 class="section-title" id="tips-heading">TIPS &amp; TRICKS</h2>
+      <div class="section-divider"></div>
+
+      <div class="cards-grid">
+        <article class="card">
+          <span class="card-icon" aria-hidden="true">🏃</span>
+          <h3 class="card-title">KEEP MOVING</h3>
+          <p class="card-text">
+            Standing still is a death sentence. The foxes never stop chasing you —
+            constant movement makes it harder for them to corner Borris.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="card-icon" aria-hidden="true">🎯</span>
+          <h3 class="card-title">ATTACK DIRECTION</h3>
+          <p class="card-text">
+            Borris attacks in the direction he's currently facing. Face a fox,
+            then press ENTER. The hit-box appears at the front edge of Borris
+            with a 55-pixel reach.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="card-icon" aria-hidden="true">💨</span>
+          <h3 class="card-title">DODGE THROUGH FOXES</h3>
+          <p class="card-text">
+            During a dodge roll Borris is completely invincible. Use it to burst
+            through a fox that's blocking your path to a carrot — you won't
+            take any damage while dodging.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="card-icon" aria-hidden="true">🗺️</span>
+          <h3 class="card-title">MEMORISE CARROT SPOTS</h3>
+          <p class="card-text">
+            Carrots always spawn at the same seven positions. Learn the layout
+            and plan a route that minimises time spent near foxes.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="card-icon" aria-hidden="true">❤️</span>
+          <h3 class="card-title">WATCH THE HUD</h3>
+          <p class="card-text">
+            Your green health bar sits in the top-left corner. Keep an eye on it —
+            7 un-dodged fox contacts is all it takes to end the run.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="card-icon" aria-hidden="true">🦊</span>
+          <h3 class="card-title">FIGHT OR FLEE?</h3>
+          <p class="card-text">
+            Each fox has 100 HP and you deal 15 per hit — that's 7 hits to kill one.
+            Fighting is slower than dodging, but clearing a fox permanently opens up
+            the farm. Your call.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- WIN / LOSE -->
+    <section class="section" aria-labelledby="winlose-heading">
+      <h2 class="section-title" id="winlose-heading">WIN &amp; LOSE CONDITIONS</h2>
+      <div class="section-divider"></div>
+      <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+        <article class="card" style="border-color:#4a8c2a;">
+          <span class="card-icon" aria-hidden="true">🏆</span>
+          <h3 class="card-title" style="color:#7ec850;">WIN</h3>
+          <p class="card-text">
+            Collect all <strong>7 carrots</strong> before Borris's health reaches zero.
+            The counter in the HUD reaches 7/7 and you've beaten the round.
+          </p>
+        </article>
+        <article class="card" style="border-color:#c0392b;">
+          <span class="card-icon" aria-hidden="true">💀</span>
+          <h3 class="card-title" style="color:#e74c3c;">LOSE</h3>
+          <p class="card-text">
+            Borris's HP drops to zero from fox contact. The Game Over screen
+            shows how many carrots you collected. Press <span class="key-badge">R</span>
+            to try again.
+          </p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <ul class="footer-nav" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="gameplay.html">How to Play</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+      </ul>
+      <p class="footer-copy">
+        &copy; 2026 Borris the Bunny &nbsp;|&nbsp; Built with Pygame &amp; pixel love<span class="blink">_</span>
+      </p>
+    </div>
+  </footer>
+
+  <script src="nav.js"></script>
+</body>
+</html>
