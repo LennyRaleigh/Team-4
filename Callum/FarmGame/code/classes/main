@@ -26,7 +26,8 @@ background_surf = pygame.image.load("FarmGame/images/barn.png").convert_alpha()
 
 player = Player(
      (all_sprites,creature_sprites),
-     pygame.image.load("FarmGame/images/rabbit.png").convert_alpha(),
+     #pygame.image.load("FarmGame/images/rabbit.png").convert_alpha(),
+     None,
      (WINDOW_WIDTH/2,WINDOW_HEIGHT/2)
      )
 background = Background(background_surf,all_sprites) #replace background_surf with current level background
@@ -52,7 +53,7 @@ cursor_rect = cursor_img.get_frect(center = (WINDOW_WIDTH/2,WINDOW_HEIGHT/2))
 
 
 while running:
-    dt = clock.tick()/1000
+    dt = clock.tick(60)/1000
     give_variables(player,creature_sprites)
     for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -85,7 +86,7 @@ while running:
 
         display_surface.fill("#2FC66B")
         display_surface.blit(background.image,background.rect)
-        background.move_bg(player,dt,all_sprites)
+        #background.move_bg(player,dt,all_sprites)
         sprites.draw(display_surface)
         all_sprites.update(dt)
     pygame.display.update()

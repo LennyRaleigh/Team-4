@@ -15,7 +15,12 @@ class Enemies(Creature): #placeholder replace with fully made enemy class
         self.right_image = pygame.transform.scale_by(self.right_image,scale)
         self.image = self.right_image
         self.rect = self.image.get_frect(center = pos)
-        self.speed = 300
+        self.speed = 150
+
+        self.max_health = 100
+        self.health = 100
+        self.hit_flash_timer = 0
+
     def update(self,dt):
         self.direction.x = player.rect.centerx - self.rect.centerx
         self.direction.y = player.rect.centery - self.rect.centery
@@ -26,6 +31,13 @@ class Enemies(Creature): #placeholder replace with fully made enemy class
         self.direction = self.direction.normalize() if self.direction else self.direction
         self.surf_direction()
         self.anti_cramming()
+
+        if self.hit_flash_timer > 0:
+            self.hit_flash_timer -= 1*dt*100
+
+            self.image = self.image.fill("#FFFFFF")
+        
+    
         self.rect.center += self.direction * self.speed * dt
     def anti_cramming(self):
         for sprite1 in creature_sprites:
@@ -34,4 +46,9 @@ class Enemies(Creature): #placeholder replace with fully made enemy class
                     if pygame.sprite.collide_mask(sprite1, sprite2,):
                         sprite1.rect.centerx += (sprite1.rect.centerx-sprite2.rect.centerx)**-1
                         sprite1.rect.centery += (sprite1.rect.centery-sprite2.rect.centery)**-1
+
+
+    def take_damage(self, amount):
+        self.health -= amount
+        self.hit_flash_timer = 8
 
