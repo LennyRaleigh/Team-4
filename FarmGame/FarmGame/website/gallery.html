@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — Borris the Bunny</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="Home">
+        <img src="../images/rabbit.png" alt="Borris" />
+        BORRIS THE BUNNY
+      </a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="gameplay.html">How to Play</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="breadcrumb-sep" aria-hidden="true">›</span>
+    <span>Gallery</span>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <header class="page-hero">
+    <div class="page-hero-content">
+      <h1 class="page-hero-title">GALLERY</h1>
+      <p class="page-hero-sub">All the pixel art assets from the farm. Click any image to enlarge.</p>
+    </div>
+  </header>
+
+  <main>
+    <!-- FILTER BUTTONS -->
+    <section class="section" aria-labelledby="gallery-heading">
+      <h2 class="section-title" id="gallery-heading">SPRITES &amp; BACKGROUNDS</h2>
+      <div class="section-divider"></div>
+
+      <div style="display:flex;gap:0.8rem;flex-wrap:wrap;margin-bottom:2rem;" role="group" aria-label="Filter gallery">
+        <button class="btn btn-orange filter-btn active-filter" data-filter="all">ALL</button>
+        <button class="btn btn-secondary filter-btn" data-filter="character">CHARACTERS</button>
+        <button class="btn btn-secondary filter-btn" data-filter="environment">ENVIRONMENT</button>
+        <button class="btn btn-secondary filter-btn" data-filter="item">ITEMS</button>
+        <button class="btn btn-secondary filter-btn" data-filter="sheet">SPRITE SHEETS</button>
+      </div>
+
+      <!-- GALLERY GRID -->
+      <div class="gallery-grid" id="gallery-grid">
+
+        <div class="gallery-item" data-category="character" tabindex="0" role="button"
+             aria-label="View Borris the Bunny">
+          <img src="../images/rabbit.png" alt="Borris the Bunny character sprite" />
+          <div class="gallery-item-label">BORRIS THE BUNNY</div>
+        </div>
+
+        <div class="gallery-item" data-category="character" tabindex="0" role="button"
+             aria-label="View Fox enemy">
+          <img src="../images/fox.png" alt="Fox enemy sprite" />
+          <div class="gallery-item-label">THE FOX</div>
+        </div>
+
+        <div class="gallery-item" data-category="sheet" tabindex="0" role="button"
+             aria-label="View Rabbit sprite sheet">
+          <img src="../images/rabbitSprite.png" alt="Rabbit walk animation sprite sheet" />
+          <div class="gallery-item-label">RABBIT SPRITE SHEET (AI)</div>
+        </div>
+
+        <div class="gallery-item" data-category="sheet" tabindex="0" role="button"
+             aria-label="View Fox sprite sheet">
+          <img src="../images/fox-sheet.png" alt="Fox walk animation sprite sheet" />
+          <div class="gallery-item-label">FOX SPRITE SHEET (AI)</div>
+        </div>
+
+        <div class="gallery-item" data-category="item" tabindex="0" role="button"
+             aria-label="View Carrot collectible">
+          <img src="../images/carrot.png" alt="Carrot collectible item" />
+          <div class="gallery-item-label">CARROT</div>
+        </div>
+
+        <div class="gallery-item" data-category="environment" tabindex="0" role="button"
+             aria-label="View Scarecrow">
+          <img src="../images/scarecrow.png" alt="Scarecrow environment prop" />
+          <div class="gallery-item-label">SCARECROW</div>
+        </div>
+
+        <div class="gallery-item" data-category="environment" tabindex="0" role="button"
+             aria-label="View House">
+          <img src="../images/house.png" alt="Farmhouse environment prop" />
+          <div class="gallery-item-label">FARMHOUSE</div>
+        </div>
+
+        <div class="gallery-item" data-category="environment" tabindex="0" role="button"
+             aria-label="View Spider">
+          <img src="../images/spider.png" alt="Spider sprite" />
+          <div class="gallery-item-label">SPIDER</div>
+        </div>
+
+        <div class="gallery-item" data-category="environment" tabindex="0" role="button"
+             aria-label="View Main Farm background">
+          <img src="../images/mainFarm.png" alt="Main farm background level" />
+          <div class="gallery-item-label">MAIN FARM BG</div>
+        </div>
+
+        <div class="gallery-item" data-category="environment" tabindex="0" role="button"
+             aria-label="View Level 2 background">
+          <img src="../images/level2.png" alt="Level 2 background" />
+          <div class="gallery-item-label">LEVEL 2 BG</div>
+        </div>
+
+      </div><!-- /.gallery-grid -->
+    </section>
+  </main>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button id="lightbox-close" aria-label="Close image viewer">✕</button>
+    <img id="lightbox-img" src="" alt="" />
+    <p id="lightbox-caption"></p>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <ul class="footer-nav" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="gameplay.html">How to Play</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+      </ul>
+      <p class="footer-copy">
+        &copy; 2026 Borris the Bunny &nbsp;|&nbsp; Built with Pygame &amp; pixel love<span class="blink">_</span>
+      </p>
+    </div>
+  </footer>
+
+  <script src="nav.js"></script>
+  <script>
+    // Gallery filter logic
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const galleryItems = document.querySelectorAll('.gallery-item');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active-filter', 'btn-orange'));
+        filterBtns.forEach(b => b.classList.add('btn-secondary'));
+        btn.classList.add('active-filter', 'btn-orange');
+        btn.classList.remove('btn-secondary');
+
+        const filter = btn.dataset.filter;
+
+        galleryItems.forEach(item => {
+          const show = filter === 'all' || item.dataset.category === filter;
+          item.style.display = show ? 'block' : 'none';
+        });
+      });
+    });
+
+    // Keyboard activation for gallery items
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      item.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          item.click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

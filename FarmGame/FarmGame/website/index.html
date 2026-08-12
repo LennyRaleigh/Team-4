@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Borris the Bunny — Farm Game</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ══════════════════════════════════
+       NAVIGATION
+  ══════════════════════════════════ -->
+  <nav id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="Home">
+        <img src="../images/rabbit.png" alt="Borris" />
+        BORRIS THE BUNNY
+      </a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="gameplay.html">How to Play</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════
+       HERO
+  ══════════════════════════════════ -->
+  <section class="hero" aria-label="Hero banner">
+    <div class="hero-bg" role="presentation"></div>
+    <div class="pixel-particles" aria-hidden="true"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">BORRIS THE BUNNY</h1>
+      <p class="hero-subtitle">
+        A scrappy little rabbit on a dangerous farm.<br />
+        He has to save his family from the mean farmer.
+      </p>
+      <div class="btn-group">
+        <a href="gameplay.html" class="btn btn-primary">HOW TO PLAY</a>
+        <a href="about.html"    class="btn btn-secondary">ABOUT</a>
+        <a href="gallery.html"  class="btn btn-orange">GALLERY</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════
+       NEWS TICKER
+  ══════════════════════════════════ -->
+  <div class="ticker-wrap" aria-hidden="true">
+    <div class="ticker-label">NEWS</div>
+    <div class="ticker-track">
+      <span>Three foxes patrol the farm</span>
+      <span>Collect all carrots in each level to win</span>
+      <span>Press SPACE to dodge attacks</span>
+      <span>Press ENTER to strike back</span>
+      <span>Borris has 100 HP — watch your health</span>
+      <span>Foxes deal 5 damage on contact</span>
+      <span>Each hit deals 15 damage to a fox</span>
+      <span>Three foxes patrol the farm</span>
+      <span>Collect all 7 carrots to win</span>
+      <span>Press SPACE to dodge attacks</span>
+      <span>Press ENTER to strike back</span>
+      <span>Borris has 100 HP — watch your health</span>
+      <span>Foxes deal 5 damage on contact</span>
+      <span>Each hit deals 15 damage to a fox</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       FEATURE CARDS
+  ══════════════════════════════════ -->
+  <main>
+    <section class="section" aria-labelledby="features-heading">
+      <h2 class="section-title" id="features-heading">WHAT IS THIS GAME?</h2>
+      <div class="section-divider"></div>
+      <p class="section-subtitle">
+        Borris the Bunny is a top-down action game built with Python and Pygame.
+        Guide Borris across a pixel-art farm, collect every carrot, and fend off
+        enemies to save your family from the farmer.
+      </p>
+
+      <div class="cards-grid">
+        <article class="card">
+          <span class="card-icon" aria-hidden="true">🥕</span>
+          <h3 class="card-title">COLLECT CARROTS</h3>
+          <p class="card-text">
+            Golden carrots are hidden across the farm.
+            Grab them all to progress through each level.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="card-icon" aria-hidden="true">🦊</span>
+          <h3 class="card-title">DODGE THE ENEMIES</h3>
+          <p class="card-text">
+            Enemies chase you down with no mercy.
+            Use SPACE to burst-dodge out of trouble before your HP hits zero.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="card-icon" aria-hidden="true">⚔️</span>
+          <h3 class="card-title">FIGHT BACK</h3>
+          <p class="card-text">
+            Press ENTER to unleash a melee strike. Each hit deals 15 damage —
+            enough to take down a fox in just seven blows.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="card-icon" aria-hidden="true">🏡</span>
+          <h3 class="card-title">PIXEL FARM WORLD</h3>
+          <p class="card-text">
+            Explore a hand-crafted pixel-art farm with animated characters,
+            a scrolling backdrop, and satisfying crunch-and-dodge combat.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         CHARACTER SPOTLIGHT
+    ══════════════════════════════════ -->
+    <section class="section" aria-labelledby="chars-heading">
+      <h2 class="section-title" id="chars-heading">MEET THE CAST</h2>
+      <div class="section-divider"></div>
+
+      <div class="feature-row">
+        <div class="feature-img-wrap">
+          <img src="../images/rabbit.png" alt="Borris the Bunny" />
+        </div>
+        <div class="feature-text">
+          <h3 class="feature-title">BORRIS THE BUNNY</h3>
+          <p class="feature-desc">
+            Our hero. An 8-frame animated rabbit with a need for speed and an
+            appetite for carrots. He can run in all four directions, dodge on a
+            short cooldown, and punch foxes in the snout. Borris starts with
+            100 HP — protect him at all costs.
+          </p>
+        </div>
+      </div>
+
+      <div class="feature-row reverse">
+        <div class="feature-img-wrap">
+          <img src="../images/fox.png" alt="Enemy Fox" />
+        </div>
+        <div class="feature-text">
+          <h3 class="feature-title">THE FOXES</h3>
+          <p class="feature-desc">
+            Three cunning foxes with a 4-frame prowl animation. They always
+            know where Borris is and actively steer toward him while avoiding
+            each other with separation logic. Each contact drains 5 HP.
+            They flash white when hit, and a red health bar appears above
+            them once damaged.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         QUICK START
+    ══════════════════════════════════ -->
+    <section class="section" style="text-align:center;" aria-labelledby="quickstart-heading">
+      <h2 class="section-title" id="quickstart-heading">READY TO PLAY?</h2>
+      <div class="section-divider" style="margin:0 auto 2rem;"></div>
+      <p class="section-subtitle" style="margin:0 auto 2rem;">
+        Run <code style="background:#1a0a00;padding:4px 10px;border:2px solid #7a4419;font-size:0.45rem;">python code/main.py</code>
+        from the project root to launch the game.
+        Make sure you have Python 3 and Pygame installed.
+      </p>
+      <div class="btn-group">
+        <a href="gameplay.html" class="btn btn-primary">SEE ALL CONTROLS</a>
+        <a href="gallery.html"  class="btn btn-orange">VIEW SCREENSHOTS</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ══════════════════════════════════
+       FOOTER
+  ══════════════════════════════════ -->
+  <footer>
+    <div class="footer-inner">
+      <ul class="footer-nav" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="gameplay.html">How to Play</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+      </ul>
+      <p class="footer-copy">
+        &copy; 2026 Borris the Bunny &nbsp;|&nbsp; Built with Pygame &amp; pixel love<span class="blink">_</span>
+      </p>
+    </div>
+  </footer>
+
+  <script src="nav.js"></script>
+</body>
+</html>
