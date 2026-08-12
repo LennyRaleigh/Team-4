@@ -24,10 +24,20 @@ creature_sprites = pygame.sprite.Group()
 background_surf = pygame.image.load("FarmGame/images/barn.png").convert_alpha()
 
 
-player = Player((all_sprites,creature_sprites),pygame.image.load("FarmGame/images/rabbit.png").convert_alpha(),(WINDOW_WIDTH/2,WINDOW_HEIGHT/2))
+player = Player(
+     (all_sprites,creature_sprites),
+     pygame.image.load("FarmGame/images/rabbit.png").convert_alpha(),
+     (WINDOW_WIDTH/2,WINDOW_HEIGHT/2)
+     )
 background = Background(background_surf,all_sprites) #replace background_surf with current level background
+
 for x in range(3):
-    Enemies((all_sprites,creature_sprites),pygame.image.load("FarmGame/images/Angry Pig.png").convert_alpha(),5,(random.randint(0, WINDOW_WIDTH),random.randint(0, WINDOW_HEIGHT)))
+
+    Enemies((all_sprites,creature_sprites),
+            pygame.image.load("FarmGame/images/Angry Pig.png").convert_alpha(),
+            5,
+            (random.randint(0, WINDOW_WIDTH),random.randint(0, WINDOW_HEIGHT))
+            )
 
 # Another sprite group to draw sprites in order
 sprites = YAwareGroup((creature_sprites)) # place any class of object into here EXCEPT background
