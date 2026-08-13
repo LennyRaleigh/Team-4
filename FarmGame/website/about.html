@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Borris the Bunny</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ══════════════════════════════════
+       NAVIGATION
+  ══════════════════════════════════ -->
+  <nav id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="Home">
+        <img src="../images/rabbit.png" alt="Borris" />
+        BORRIS THE BUNNY
+      </a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="gameplay.html">How to Play</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════
+       BREADCRUMB
+  ══════════════════════════════════ -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="breadcrumb-sep" aria-hidden="true">›</span>
+    <span>About</span>
+  </nav>
+
+  <!-- ══════════════════════════════════
+       PAGE HERO
+  ══════════════════════════════════ -->
+  <header class="page-hero">
+    <div class="page-hero-content">
+      <h1 class="page-hero-title">ABOUT THE GAME</h1>
+      <p class="page-hero-sub">The story, the characters, and the farm behind the madness.</p>
+    </div>
+  </header>
+
+  <main>
+    <!-- ══════════════════════════════════
+         STORY
+    ══════════════════════════════════ -->
+    <section class="section" aria-labelledby="story-heading">
+      <h2 class="section-title" id="story-heading">THE STORY</h2>
+      <div class="section-divider"></div>
+
+      <div class="about-profile">
+        <div class="about-avatar">
+          <img src="../images/rabbit.png" alt="Borris the Bunny" />
+          <span class="about-avatar-name">BORRIS</span>
+        </div>
+        <div class="about-bio">
+          <p>
+            Deep in the pixel countryside sits a small but dangerous farm. Borris the Bunny
+            has one job to save his family from the farmer and his animals
+          </p>
+          <p>
+            Armed with quick legs, a dodge roll, and a surprisingly solid right hook, Borris
+            must outmanoeuvre the enemies, snatch every last carrot, and make it out alive.
+            Fail, and the Game Over screen reminds you exactly how many carrots you managed
+            to grab before the farmer won.
+          </p>
+          <p>
+            Built with <strong>Python 3</strong> and <strong>Pygame</strong>, the game
+            features sprite-sheet animation, enemy AI with separation steering,
+            collision-based combat, a dodge mechanic with cooldown, and a persistent
+            health system.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         CHARACTER BIOS
+    ══════════════════════════════════ -->
+    <section class="section" aria-labelledby="chars-heading">
+      <h2 class="section-title" id="chars-heading">CHARACTERS</h2>
+      <div class="section-divider"></div>
+
+      <div class="cards-grid">
+        <article class="card">
+          <img src="../images/rabbit.png" alt="Borris the Bunny"
+               style="width:80px;height:80px;object-fit:contain;image-rendering:pixelated;
+                      margin-bottom:1rem;border:3px solid #7a4419;background:#2d5a1b;padding:6px;" />
+          <h3 class="card-title">BORRIS THE BUNNY</h3>
+          <p class="card-text">
+            The player character. 8-frame animated sprite, moves at speed 5,
+            dodge speed 18. 100 HP. Attacks for 15 damage with a 55-pixel range.
+            Invincible during dodge frames.
+          </p>
+        </article>
+
+        <article class="card">
+          <img src="../images/fox.png" alt="The Fox Enemy"
+               style="width:80px;height:80px;object-fit:contain;image-rendering:pixelated;
+                      margin-bottom:1rem;border:3px solid #7a4419;background:#2d5a1b;padding:6px;" />
+          <h3 class="card-title">THE FOXES</h3>
+          <p class="card-text">
+            Three hunters. 4-frame animation, speed 3. Chase Borris using
+            direction vectors + separation steering. 100 HP each. Deal 5 damage
+            on contact. Flash white when struck.
+          </p>
+        </article>
+
+        <article class="card">
+          <img src="../images/scarecrow.png" alt="Scarecrow"
+               style="width:80px;height:80px;object-fit:contain;image-rendering:pixelated;
+                      margin-bottom:1rem;border:3px solid #7a4419;background:#2d5a1b;padding:6px;" />
+          <h3 class="card-title">SCARECROW</h3>
+          <p class="card-text">
+            A permanent fixture of the farm. Doesn't move, doesn't help —
+            but stands as a pixel-art landmark on the level, giving the
+            farm that authentic countryside feel.
+          </p>
+        </article>
+
+        <article class="card">
+          <img src="../images/carrot.png" alt="Carrot"
+               style="width:80px;height:80px;object-fit:contain;image-rendering:pixelated;
+                      margin-bottom:1rem;border:3px solid #7a4419;background:#2d5a1b;padding:6px;" />
+          <h3 class="card-title">THE CARROTS</h3>
+          <p class="card-text">
+            Seven collectibles placed across the level, each surrounded by
+            a soft golden glow. Touch one to add it to your tally.
+            Collect all 7 to win the round.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         TECH STACK
+    ══════════════════════════════════ -->
+    <section class="section" aria-labelledby="tech-heading">
+      <h2 class="section-title" id="tech-heading">TECH STACK</h2>
+      <div class="section-divider"></div>
+
+      <div class="feature-row">
+        <div class="feature-img-wrap" style="font-size:4rem;font-weight:bold;color:#7ec850;">Py</div>
+        <div class="feature-text">
+          <h3 class="feature-title">PYTHON 3 &amp; PYGAME</h3>
+          <p class="feature-desc">
+            The entire game runs on Python 3 with the Pygame library handling
+            the display surface, sprite groups, image loading, collision detection,
+            and the 60 FPS game loop. No external engine — just pure Python.
+          </p>
+        </div>
+      </div>
+
+      <div class="feature-row reverse">
+        <div class="feature-img-wrap" style="font-size:3.5rem;">🎨</div>
+        <div class="feature-text">
+          <h3 class="feature-title">HAND-CRAFTED PIXEL ART</h3>
+          <p class="feature-desc">
+            All art assets are pixel sprites: a rabbit sprite sheet with 8 walk frames
+            across a 3×3 grid at 64×64 px, a 4-frame fox sheet at 340×340 px per cell,
+            and tiled background levels with a house, scarecrow, and farm scenery.
+          </p>
+        </div>
+      </div>
+
+      <div class="feature-row">
+        <div class="feature-img-wrap" style="font-size:3.5rem;">🤖</div>
+        <div class="feature-text">
+          <h3 class="feature-title">ENEMY AI</h3>
+          <p class="feature-desc">
+            Foxes use a lightweight steering system: each frame they compute a
+            direction vector toward Borris, then add a separation force that
+            pushes them away from nearby foxes. This keeps them spread out and
+            avoids clumping, making them feel more alive without pathfinding.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         STAT BARS
+    ══════════════════════════════════ -->
+    <section class="section" aria-labelledby="stats-heading">
+      <h2 class="section-title" id="stats-heading">BORRIS BY THE NUMBERS</h2>
+      <div class="section-divider"></div>
+
+      <div style="max-width:600px;">
+        <div class="stat-row">
+          <span class="stat-label">MAX HEALTH</span>
+          <div class="stat-bar-bg">
+            <div class="stat-bar-fill" data-value="100" style="background:#4a8c2a;"></div>
+          </div>
+          <span class="stat-value">100</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">MOVE SPEED</span>
+          <div class="stat-bar-bg">
+            <div class="stat-bar-fill" data-value="50" style="background:#87ceeb;"></div>
+          </div>
+          <span class="stat-value">5</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">DODGE SPEED</span>
+          <div class="stat-bar-bg">
+            <div class="stat-bar-fill orange" data-value="90"></div>
+          </div>
+          <span class="stat-value">18</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">ATTACK DAMAGE</span>
+          <div class="stat-bar-bg">
+            <div class="stat-bar-fill orange" data-value="75"></div>
+          </div>
+          <span class="stat-value">15</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">ATTACK RANGE</span>
+          <div class="stat-bar-bg">
+            <div class="stat-bar-fill sky" data-value="55"></div>
+          </div>
+          <span class="stat-value">55px</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">CARROTS TO WIN</span>
+          <div class="stat-bar-bg">
+            <div class="stat-bar-fill" data-value="70" style="background:#e8832a;"></div>
+          </div>
+          <span class="stat-value">7</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ══════════════════════════════════
+       FOOTER
+  ══════════════════════════════════ -->
+  <footer>
+    <div class="footer-inner">
+      <ul class="footer-nav" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="gameplay.html">How to Play</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+      </ul>
+      <p class="footer-copy">
+        &copy; 2026 Borris the Bunny &nbsp;|&nbsp; Built with Pygame &amp; pixel love<span class="blink">_</span>
+      </p>
+    </div>
+  </footer>
+
+  <script src="nav.js"></script>
+</body>
+</html>
