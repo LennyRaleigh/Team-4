@@ -40,6 +40,9 @@ LEVELS = [
         'enemy_image': 'Angry Pig.png',
         'enemy_count': 3,
         'enemy_scale': 5,
+        'enemy_health': 60,
+        'enemy_damage': 3,
+        'enemy_speed': 100,
         'carrots': [(200, 200), (400, 100), (600, 300), (900, 200), (300, 500)],
         'cutscene': 'cutscene-1',
     },
@@ -48,6 +51,9 @@ LEVELS = [
         'enemy_image': 'fox.png',
         'enemy_count': 5,
         'enemy_scale': 0.2,
+        'enemy_health': 100,
+        'enemy_damage': 5,
+        'enemy_speed': 150,
         'carrots': [(100, 150), (500, 200), (700, 400), (300, 600), (1000, 300), (600, 500)],
         'cutscene': 'cutscene-2',
     },
@@ -92,7 +98,9 @@ def load_level(n):
             (all_sprites, creature_sprites),
             enemy_img,
             data['enemy_scale'],
-            (random.randint(0, WINDOW_WIDTH), random.randint(0, WINDOW_HEIGHT))
+            (random.randint(0, WINDOW_WIDTH), random.randint(0, WINDOW_HEIGHT)),
+            LEVELS[level-1]['enemy_health'],
+            LEVELS[level-1]['enemy_speed']
         )
 
     sprites = YAwareGroup(creature_sprites)
@@ -199,7 +207,7 @@ while running:
             for enemy in list(creature_sprites):
                 if isinstance(enemy, Enemies):
                     if player.rect.colliderect(enemy.rect):
-                        player.take_damage(5)
+                        player.take_damage(LEVELS[level-1]['enemy_damage'])
                         if player.health <= 0:
                             game_state = "game_over"
                             walk_channel.stop()

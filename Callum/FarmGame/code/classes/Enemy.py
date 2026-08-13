@@ -11,14 +11,14 @@ from creature import Creature
 
 
 class Enemies(Creature):
-    def __init__(self, groups, image, scale, pos):
+    def __init__(self, groups, image, scale, pos,health,speed):
         super().__init__(groups, image)
         self.right_image = pygame.transform.scale_by(self.right_image, scale)
         self.image = self.right_image
         self.rect = self.image.get_frect(center=pos)
-        self.speed = 150
-        self.max_health = 100
-        self.health = 100
+        self.speed = speed
+        self.max_health = health
+        self.health = health
         self.hit_flash_timer = 0
         self.knockback = pygame.Vector2()
         self.knockback_timer = 0
