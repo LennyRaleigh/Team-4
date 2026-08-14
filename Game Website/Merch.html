@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <!-- Sets the title shown in the browser tab -->
+    <title>Merch</title>
+
+    <!-- Links the Merch CSS file to the page -->
+    <link rel="stylesheet" href="Merch.css">
+
+</head>
+
+<body>
+
+
+    <!-- Dropdown navigation menu -->
+
+    <div class="dropdown">
+
+        <!-- Button used to open the navigation menu -->
+        <button class="dropbtn">▼</button>
+
+        <!-- Contains the links to the other pages -->
+        <div class="dropdown-content">
+
+            <a href="HomePage.html">Home</a>
+            <a href="AboutUs.html">About Us</a>
+            <a href="ContactUs.html">Contact Us</a>
+            <a href="Gameplay.html">Gameplay</a>
+            <a href="Merch.html">Merch</a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Main page heading -->
+
+    <h1><u>Merch</u></h1>
+
+
+    <!-- Contains the search bar and shopping cart button -->
+
+    <div class="shop-controls">
+
+        <!-- Allows the user to search for products -->
+        <input
+            type="text"
+            id="searchBar"
+            placeholder="Search products..."
+        >
+
+        <!-- Opens and closes the shopping cart -->
+        <button class="cart-button" onclick="toggleCart()">
+
+            🛒 <span id="cartCount">0</span>
+
+        </button>
+
+    </div>
+
+
+    <!-- Product category buttons -->
+
+    <div class="category-buttons">
+
+        <!-- Shows every product -->
+        <button onclick="showAllProducts()">
+            All Products
+        </button>
+
+        <!-- Scrolls to the bunny products -->
+        <button onclick="scrollToSection('bunnies')">
+            Bunny
+        </button>
+
+        <!-- Scrolls to the pig products -->
+        <button onclick="scrollToSection('pigs')">
+            Pig
+        </button>
+
+        <!-- Scrolls to the carrot products -->
+        <button onclick="scrollToSection('carrots')">
+            Carrot
+        </button>
+
+        <!-- Scrolls to the scarecrow products -->
+        <button onclick="scrollToSection('scarecrows')">
+            Scarecrow
+        </button>
+
+    </div>
+
+
+    <!-- Cart -->
+
+    <div id="cart" class="cart">
+
+        <!-- Cart heading -->
+        <h2>Your Cart</h2>
+
+        <!-- Shows the total number of items in the cart -->
+        <p class="cart-number">
+
+            Number of Items:
+
+            <span id="cartItems">0</span>
+
+        </p>
+
+        <!-- Products added to the cart are displayed here -->
+        <div id="cartProducts"></div>
+
+        <!-- Contains the checkout and close buttons -->
+        <div class="cart-buttons">
+
+            <!-- Takes the user to the checkout page -->
+            <a href="Checkout.html" class="checkout-button">
+                Checkout
+            </a>
+
+            <!-- Closes the shopping cart -->
+            <button
+                class="close-cart-button"
+                onclick="toggleCart()">
+
+                Close Cart
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- All Products -->
+
+    <h2 id="all-products">All Products</h2>
+
+
+    <!-- Bunnies -->
+
+    <div class="product-section">
+
+        <!-- Bunny category heading -->
+        <h3 id="bunnies">Bunnies</h3>
+
+        <div class="products">
+
+
+            <!-- Bunny Tote Bag -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="BunnyBag.png">
+
+                <!-- Product name -->
+                <h4>Tote bag</h4>
+
+                <!-- Product price -->
+                <p>€15.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('Tote bag', 15)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+
+            <!-- Bunny Coffee Mug -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="BunnyMug.png">
+
+                <!-- Product name -->
+                <h4>Coffee Mug</h4>
+
+                <!-- Product price -->
+                <p>€15.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('Coffee Mug', 15)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+
+            <!-- Bunny Pillow -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="BunnyPillow.png">
+
+                <!-- Product name -->
+                <h4>Pillow</h4>
+
+                <!-- Product price -->
+                <p>€15.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('Pillow', 15)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+
+            <!-- Boris Shirt -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="BunnyShirt.png">
+
+                <!-- Product name -->
+                <h4>Boris Shirt</h4>
+
+                <!-- Product price -->
+                <p>€15.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('Boris Shirt', 15)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+
+            <!-- Black Bunny -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="Bunny1.png">
+
+                <!-- Product name -->
+                <h4>Black Bunny</h4>
+
+                <!-- Product price -->
+                <p>€20.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('Black Bunny', 20)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+
+            <!-- New Zeland Bunny -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="Bunny2.png">
+
+                <!-- Product name -->
+                <h4>New Zeland Bunny</h4>
+
+                <!-- Product price -->
+                <p>€20.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('New Zeland Bunny', 20)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+
+            <!-- Really Tall Bunny -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="Bunny3.png">
+
+                <!-- Product name -->
+                <h4>Really Tall Bunny</h4>
+
+                <!-- Product price -->
+                <p>€20.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('Really Tall Bunny', 20)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+
+            <!-- Bunny? -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="Bunny4.png">
+
+                <!-- Product name -->
+                <h4>Bunny?</h4>
+
+                <!-- Product price -->
+                <p>€20.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('Bunny?', 20)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Pigs -->
+
+    <div class="product-section">
+
+        <!-- Pig category heading -->
+        <h3 id="pigs">Pigs</h3>
+
+        <div class="products">
+
+
+            <!-- Pig Poster -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="PigArt.png">
+
+                <!-- Product name -->
+                <h4>Pig Poster</h4>
+
+                <!-- Product price -->
+                <p>€40.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('Pig Poster', 40)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+
+            <!-- Pig Tote Bag -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="PigBag.png">
+
+                <!-- Product name -->
+                <h4>Pig Tote Bag</h4>
+
+                <!-- Product price -->
+                <p>€40.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('Pig Tote Bag', 40)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+
+            <!-- Pig Coffee Mug -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="PigMug.png">
+
+                <!-- Product name -->
+                <h4>Pig Coffee Mug</h4>
+
+                <!-- Product price -->
+                <p>€40.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('Pig Coffee Mug', 40)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+
+            <!-- Pig Phone Case -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="PigPhone.png">
+
+                <!-- Product name -->
+                <h4>Pig Phone Case</h4>
+
+                <!-- Product price -->
+                <p>€40.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('Pig Phone Case', 40)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+
+            <!-- Pig T-Shirt -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="PigShirt.png">
+
+                <!-- Product name -->
+                <h4>Pig T-Shirt</h4>
+
+                <!-- Product price -->
+                <p>€40.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('Pig T-Shirt', 40)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Carrots -->
+
+    <div class="product-section">
+
+        <!-- Carrot category heading -->
+        <h3 id="carrots">Carrots</h3>
+
+        <div class="products">
+
+
+            <!-- Carrot Coffee Mug -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="CarrottMug.png">
+
+                <!-- Product name -->
+                <h4>Carrot Coffee Mug</h4>
+
+                <!-- Product price -->
+                <p>€15.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('Carrot Coffee Mug', 15)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+
+            <!-- Carrot Tote Bag -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="CarrottBag.png">
+
+                <!-- Product name -->
+                <h4>Carrot Tote Bag</h4>
+
+                <!-- Product price -->
+                <p>€20.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('Carrot Tote Bag', 20)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+
+            <!-- Carrot Pillow -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="CarrottPillow.png">
+
+                <!-- Product name -->
+                <h4>Carrot Pillow</h4>
+
+                <!-- Product price -->
+                <p>€20.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('Carrot Pillow', 20)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+
+            <!-- Carrot Poster -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="CarrottPoster.png">
+
+                <!-- Product name -->
+                <h4>Carrot Poster</h4>
+
+                <!-- Product price -->
+                <p>€15.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('Carrot Poster', 15)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+
+            <!-- Carrot Shirt -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="CarrottShirt.png">
+
+                <!-- Product name -->
+                <h4>Carrot Shirt</h4>
+
+                <!-- Product price -->
+                <p>€25.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('Carrot Shirt', 25)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Scarecrows -->
+
+    <div class="product-section">
+
+        <!-- Scarecrow category heading -->
+        <h3 id="scarecrows">Scarecrows</h3>
+
+        <div class="products">
+
+
+            <!-- Scarecrow Tote Bag -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="ScarecrowBag.png">
+
+                <!-- Product name -->
+                <h4>Scarecrow Tote Bag</h4>
+
+                <!-- Product price -->
+                <p>€25.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('Scarecrow Tote Bag', 25)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+
+            <!-- Scarecrow Coffee Mug -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="ScarecrowMug.png">
+
+                <!-- Product name -->
+                <h4>Scarecrow Coffee Mug</h4>
+
+                <!-- Product price -->
+                <p>€25.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('Scarecrow Coffee Mug', 25)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+
+            <!-- Scarecrow Phone Case -->
+
+            <div class="product">
+
+                <!-- Product image -->
+                <img src="ScarecrowPhone.png">
+
+                <!-- Product name -->
+                <h4>Scarecrow Phone Case</h4>
+
+                <!-- Product price -->
+                <p>€25.00</p>
+
+                <!-- Adds the product to the cart -->
+                <button onclick="addToCart('Scarecrow Phone Case', 25)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Loads the JavaScript file for the shopping cart and search -->
+    <script src="Merch.js"></script>
+
+</body>
+
+</html>

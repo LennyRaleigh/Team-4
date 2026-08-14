@@ -15,6 +15,10 @@ game_over_sound = pygame.mixer.Sound(join("FarmGame/audio/lesiakower-8-bit-game-
 victory_sound   = pygame.mixer.Sound(join("FarmGame/audio/Fortnite Victory Royale - QuickSounds.com.mp3"))
 walk_channel    = pygame.mixer.Channel(0)
 farm_attack_sound = pygame.mixer.Sound(join("FarmGame/audio/farmer-attack.mp3"))
+background_sound = pygame.mixer.Sound(join("FarmGame/audio/1-03. Subwoofer Lullaby.mp3"))
+
+background_sound.set_volume(1.5)
+background_sound.play(loops=1)
 
 # load the background image
 background = pygame.image.load(join('FarmGame', 'images', 'background.png'))
@@ -511,6 +515,7 @@ player, player_group, enemies, carrots = reset_game()
 game_state = 'playing'
 alive_time  = 0.0              
 running     = True
+victory_played = False
 
 print("Starting Game")
 while running:
@@ -523,8 +528,6 @@ while running:
         if event.type == pygame.KEYDOWN:
 
             if game_state == "playing":
-
-                alive_time =+ 1 / 60
 
                 if event.key == pygame.K_SPACE:
                     player.dodge()
@@ -546,6 +549,7 @@ while running:
                     player, player_group, enemies, carrots = reset_game()
                     game_state = 'playing'
                     alive_time = 0.0
+                    victory_played = False
 
             elif game_state == 'game_over':      
                    
@@ -564,6 +568,7 @@ while running:
                     player, player_group, enemies, carrots = reset_game()
                     game_state = 'playing'
                     alive_time = 0.0
+                    victory_played = False
 
                 if event.key == pygame.K_ESCAPE:
                     running = False
@@ -586,10 +591,10 @@ while running:
                 carrots.remove(carrot)
 
         
-        if player.carrots_collected >= 10:
-            if enemy.health <= 0: 
+        if player.carrots_collected >= 10 and enemy.health <=0:
+            if game_state != 'level_complete':
                 game_state = 'level_complete'
-            victory_sound.play()
+                victory_sound.play()
 
         if player.health <= 0:
             game_state = 'game_over'         
@@ -612,6 +617,8 @@ while running:
     draw_carrot_counter(screen, player.carrots_collected)
     draw_timer(screen, alive_time)
 
+    mins = int(alive_time) // 60
+    secs = int(alive_time) % 60
     
     if game_state == 'paused':
 
@@ -635,7 +642,19 @@ while running:
 
         screen.blit(overlay, (0, 0))
         screen.blit(font.render("GAME OVER", True, (220, 40, 40)),  (480, 280))
-        screen.blit(small.render("R restart   ESC quit", True, (200, 200, 200)), (490, 370))
+
+        mins = int(alive_time) // 60
+        secs = int(alive_time) % 60
+
+        time_text = font.render(
+            f"Time: {mins:02}:{secs:02}",
+            True,
+            (255, 255, 255)
+        )
+
+        screen.blit(time_text, (500, 340))
+        
+        screen.blit(small.render("R restart   ESC quit", True, (200, 200, 200)), (520, 440))
 
     elif game_state == 'level_complete':
         font = pygame.font.Font(None, 72)
@@ -646,7 +665,16 @@ while running:
 
         screen.blit(overlay, (0, 0))
         screen.blit(font.render("YOU WIN!", True, (50, 220, 50)),   (520, 280))
-        screen.blit(small.render("ENTER play again   ESC quit", True, (200, 200, 200)), (430, 370))
+
+        time_text = font.render(
+                    f"Time: {mins:02}:{secs:02}",
+                    True,
+                    (255, 255, 255)
+                )
+        
+        screen.blit(time_text, (500, 340))
+
+        screen.blit(small.render("ENTER play again   ESC quit", True, (200, 200, 200)), (480, 400))
 
     pygame.display.update()
 
