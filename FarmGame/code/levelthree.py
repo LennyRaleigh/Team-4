@@ -9,22 +9,30 @@ screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption('Game')
 clock = pygame.time.Clock()
 
+swoosh_sound    = pygame.mixer.Sound(join("FarmGame/audio/universfield-swoosh-015-383769.mp3"))
+walk_sound      = pygame.mixer.Sound(join("FarmGame/audio/joentnt-walk-on-grass-1-291984.mp3"))
+game_over_sound = pygame.mixer.Sound(join("FarmGame/audio/lesiakower-8-bit-game-over-sound-effect-331435.mp3"))
+victory_sound   = pygame.mixer.Sound(join("FarmGame/audio/Fortnite Victory Royale - QuickSounds.com.mp3"))
+walk_channel    = pygame.mixer.Channel(0)
+farm_attack_sound = pygame.mixer.Sound(join("FarmGame/audio/farmer-attack.mp3"))
+
 # load the background image
 background = pygame.image.load(join('FarmGame', 'images', 'background.png'))
-
-# resize it to fit the window
 background = pygame.transform.scale(background, (WINDOW_WIDTH, WINDOW_HEIGHT))
+
+carrot_icon = pygame.image.load(join('FarmGame', 'images', 'carrot.png')).convert_alpha()
+carrot_icon = pygame.transform.scale(carrot_icon, (35, 35))
+
 
 class Player(pygame.sprite.Sprite):
     FRAME_COORDS = [
-     (0,0), (1,0), (2,0),
-     (0,1), (1,1), (2,1),
-     (0,2), (1,2),
-
+        (0, 0), (1, 0), (2, 0),
+        (0, 1), (1, 1), (2, 1),
+        (0, 2), (1, 2),
     ]
-    FRAME_SIZE = 64
+    FRAME_SIZE   = 64
     DISPLAY_SIZE = (100, 100)
-   
+
     def __init__(self, groups):
         super().__init__(groups)
         self.right_image = pygame.image.load(
@@ -32,7 +40,6 @@ class Player(pygame.sprite.Sprite):
         ).convert_alpha()
 
         self.frames_right = []
-
         for col, row in Player.FRAME_COORDS:
             rect = pygame.Rect(
                 col * Player.FRAME_SIZE,
@@ -40,16 +47,14 @@ class Player(pygame.sprite.Sprite):
                 Player.FRAME_SIZE,
                 Player.FRAME_SIZE
             )
-
             frame = self.right_image.subsurface(rect).copy()
             frame = pygame.transform.scale(frame, Player.DISPLAY_SIZE)
-
             self.frames_right.append(frame)
 
-        self.frames_left =[
-                pygame.transform.flip(frame, True, False) 
-                for frame in self.frames_right
-            ]
+        self.frames_left = [
+            pygame.transform.flip(frame, True, False)
+            for frame in self.frames_right
+        ]
 
         self.frame_index = 0
         self.animation_speed = 0.1
@@ -71,15 +76,14 @@ class Player(pygame.sprite.Sprite):
         self.attack_size = (100, 60)
 
         self.facing_right = True
-
         self.image = self.frames_right[0]
+        self.rect  = self.image.get_frect(center=(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
 
-        self.rect = self.image.get_frect(
-            center=(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)
-        )
+        self.dodge_direction = pygame.Vector2(1, 0)
 
         self.direction = pygame.math.Vector2()
         self.speed = 300
+        self.dodge_speed = 800
         self.going_right = True
         self.health = 100
         self.max_health = 100
@@ -87,89 +91,92 @@ class Player(pygame.sprite.Sprite):
 
     def attack(self):
         if self.attack_cooldown <= 0:
-            self.attacking = True
-            self.attack_timer = self.attack_duration
+            self.attacking       = True
+            self.attack_timer    = self.attack_duration
             self.attack_cooldown = self.attack_cooldown_max
-            self.enemies_hit = []
+            self.enemies_hit     = []
 
     def get_attack_rect(self):
         width, height = self.attack_size
-
         if self.facing_right:
             x = self.rect.right + self.attack_range
         else:
             x = self.rect.left - self.attack_range - width
-
         y = self.rect.centery - height // 2
-
         return pygame.Rect(x, y, width, height)
 
     def take_damage(self, amount):
         if self.damage_cooldown <= 0:
             self.health -= amount
             self.damage_cooldown = self.damage_cooldown_max
-
             print("Player health", self.health)
 
-            if self.health <= 0:
-                print("Game Over")
+    def dodge(self):
+        if self.dodge_cooldown <= 0:
 
-    def update(self,dt):
-            keys = pygame.key.get_pressed()
+            if self.direction.length() > 0:
+                self.dodge_direction = self.direction.copy()
 
-            self.direction.x = int(keys[pygame.K_d]) - int(keys[pygame.K_a])
-            self.direction.y = int(keys[pygame.K_s]) - int(keys[pygame.K_w])
+            self.dodging        = True
+            self.dodge_timer    = 0.25          
+            self.dodge_cooldown = 1.0           
 
-            if self.damage_cooldown > 0:
-                self.damage_cooldown -= dt
+    def update(self, dt, enemies):             
+        keys = pygame.key.get_pressed()
+        self.direction.x = int(keys[pygame.K_d]) - int(keys[pygame.K_a])
+        self.direction.y = int(keys[pygame.K_s]) - int(keys[pygame.K_w])
 
-            if self.dodge_timer > 0:
-                self.dodge_timer -= dt
-            else:
-                self.dodging = False
+        if self.dodging:
+            current_speed = self.dodge_speed
+            move_direction = self.dodge_direction
+        else:
+            current_speed = self.speed
+            move_direction = self.direction
+        
+        self.rect.center += move_direction * current_speed * dt 
 
-            if self.dodge_cooldown > 0:
-                self.dodge_cooldown -= dt
-            
-            if self.attack_timer > 0:
-                self.attack_timer -= dt
+        if self.damage_cooldown > 0:
+            self.damage_cooldown -= dt
 
-                if self.attack_timer <= 0: 
-                    self.attacking = False 
-            else:
-                    self.attacking = 0
+        if self.dodge_timer > 0:
+            self.dodge_timer -= dt
+        else:
+            self.dodging = False
 
-            if self.attack_cooldown > 0:
-                self.attack_cooldown -= dt
+        if self.dodge_cooldown > 0:
+            self.dodge_cooldown -= dt
 
-            if self.health <= 0:
-                print("Game Over")
-                pygame.quit()
-                exit()
-                
-            self.direction = (
-            self.direction.normalize() 
-            if self.direction
-            else self.direction
-            )
-
-            if self.attacking:
-                attack_rect = self.get_attack_rect()
-
-                if farmer not in self.enemies_hit:
-                    if attack_rect.colliderect(farmer.rect):
-                        farmer.take_damage(10)
-                        self.enemies_hit.append(farmer)
-
+        if self.attack_timer > 0:
+            self.attack_timer -= dt
             if self.attack_timer <= 0:
                 self.attacking = False
+        else:
+            self.attacking = False              
 
-                    
+        if self.attack_cooldown > 0:
+            self.attack_cooldown -= dt
 
-            self.rect.center += self.direction * self.speed * dt
+        if self.health <= 0:
+            print("Game Over")
+            pygame.quit()
+            exit()
 
-            self.animate(dt)
-            self.surf_direction()
+        self.direction = (
+            self.direction.normalize()
+            if self.direction
+            else self.direction
+        )
+
+        if self.attacking:
+            attack_rect = self.get_attack_rect()
+            for enemy in enemies:
+                if enemy not in self.enemies_hit:
+                    if attack_rect.colliderect(enemy.rect):
+                        enemy.take_damage(10)   
+                        self.enemies_hit.append(enemy)
+
+        self.animate(dt)
+        self.surf_direction()
 
     def surf_direction(self):
         if self.direction.x < 0:
@@ -182,17 +189,14 @@ class Player(pygame.sprite.Sprite):
 
     def animate(self, dt):
         if self.direction.length() > 0:
-
             self.animation_timer += dt
 
             if self.animation_timer >= self.animation_speed:
                 self.animation_timer = 0
-
                 self.frame_index += 1
 
                 if self.frame_index >= len(self.frames_right):
                     self.frame_index = 0
-
         else:
             self.frame_index = 0
 
@@ -201,67 +205,71 @@ class Player(pygame.sprite.Sprite):
         else:
             self.image = self.frames_left[self.frame_index]
 
-class Farmer(pygame.sprite.Sprite):
 
+class Farmer(pygame.sprite.Sprite):
     DISPLAY_SIZE = (200, 200)
 
     def __init__(self, groups, player):
         super().__init__(groups)
 
-        self.sprite_sheet = pygame.image.load(
+        self.walk_sheet = pygame.image.load(
             join("FarmGame", "images", "farmer.sprite.sheet.png")
         ).convert_alpha()
 
-        # The sheet has 6 columns and 6 rows
-        sheet_width, sheet_height = self.sprite_sheet.get_size()
+        self.attack_sheet = pygame.image.load(
+            join("FarmGame", "images", "farmer.attack.sprite.sheet3.png")
+        ).convert_alpha()
 
-        frame_width = sheet_width // 6
-        frame_height = sheet_height // 6
+        self.frame_index = 0
+        self.animation_timer = 0
+        self.animation_speed = 0.1
 
+        self.attacking = False
+        self.attack_timer = 0
+        self.attack_duration = 0.6
+        self.attack_cooldown = 0
+        self.attack_cooldown_max = 1.0
+
+        self.damage_cooldown = 0
+        self.damage_cooldown_max = 1.0
+
+        self.dead   = False
+        self.player = player
+        self.speed  = 100
+
+        self.health = 200
+        self.max_health = 200
+
+        self.hit_flash_timer = 0
+
+        self.walk_frames = self.get_frames(self.walk_sheet,   6, 6)
+        self.attack_frames = self.get_frames(self.attack_sheet, 5, 5)
+
+        self.image = self.walk_frames[0]
+        self.rect  = self.image.get_frect(center=(1000, 470))
+
+    def get_frames(self, sheet, columns, rows):
+        sheet_width, sheet_height = sheet.get_size()
+        frame_width  = sheet_width  // columns
+        frame_height = sheet_height // rows
+
+        frames = []
         print("Sheet size:", sheet_width, sheet_height)
         print("Frame size:", frame_width, frame_height)
 
-        self.frames = []
-
-        for row in range(6):
-            for col in range(6):
-
+        for row in range(rows):
+            for col in range(columns):
                 rect = pygame.Rect(
                     col * frame_width,
                     row * frame_height,
                     frame_width,
                     frame_height
                 )
+                frame = sheet.subsurface(rect).copy()
+                frame = pygame.transform.scale(frame, Farmer.DISPLAY_SIZE)
+                frames.append(frame)
 
-                frame = self.sprite_sheet.subsurface(rect).copy()
-
-                frame = pygame.transform.scale(
-                    frame,
-                    Farmer.DISPLAY_SIZE
-                )
-
-                self.frames.append(frame)
-
-        self.frame_index = 0
-        self.animation_timer = 0
-        self.animation_speed = 0.1
-        self.damage_cooldown = 0
-        self.damage_cooldown_max = 1.0
-
-        self.image = self.frames[0]
-        self.dead = False
-
-        self.rect = self.image.get_frect(
-            center=(1000, 470)
-        )
-
-        self.player = player
-        self.speed = 100
-
-        self.health = 120
-        self.max_health = 120
-
-        self.hit_flash_timer = 0
+        return frames
 
     def take_damage(self, amount):
         self.health -= amount
@@ -270,82 +278,81 @@ class Farmer(pygame.sprite.Sprite):
         if self.health <= 0:
             self.dead = True
 
-    def animate(self, dt):
-        self.animation_timer += dt
+    def attack(self):
+        if self.attack_cooldown <= 0 and not self.attacking:
 
-        if self.animation_timer >= self.animation_speed:
+            self.attacking = True
+            self.attack_timer = self.attack_duration
+            self.attack_cooldown = self.attack_cooldown_max
+            self.frame_index = 0
             self.animation_timer = 0
 
+            farm_attack_sound.play()
+
+    def animate(self, dt):
+        self.animation_timer += dt
+        if self.animation_timer >= self.animation_speed:
+            self.animation_timer = 0
             self.frame_index += 1
 
-            if self.frame_index >= len(self.frames):
-                self.frame_index = 0
+            if self.attacking:
+                if self.frame_index >= len(self.attack_frames):
+                    self.frame_index = len(self.attack_frames) - 1
+            else:
+                if self.frame_index >= len(self.walk_frames):
+                    self.frame_index = 0
 
-        self.image = self.frames[self.frame_index]
+        if self.attacking:
+            self.image = self.attack_frames[self.frame_index]
+        else:
+            self.image = self.walk_frames[self.frame_index]
 
-    def update(self, dt):
-
+    def update(self, dt, enemies=None):          
         if self.dead:
             return
-        
+
+        if self.attack_cooldown > 0:
+            self.attack_cooldown -= dt
+
+        if self.attacking:
+            self.attack_timer -= dt
+
+            if self.attack_timer <= 0:
+                self.attacking = False
+                self.frame_index = 0           
+                self.animation_timer = 0
+
+            self.animate(dt)
+            return                                 
+
         direction = (
             pygame.Vector2(self.player.rect.center)
             - pygame.Vector2(self.rect.center)
         )
+        distance = direction.length()
 
-        if direction.length() > 0:
+        if distance > 150:
             direction = direction.normalize()
+            self.rect.center += direction * self.speed * dt
 
-            self.rect.center += (
-                direction * self.speed * dt
-            )
+        elif self.attack_cooldown <= 0:
+            self.attack() 
+            self.player.take_damage(10)  
 
-        if self.rect.colliderect(self.player.rect):
-            self.player.take_damage(10)
+            
+        if self.attacking:
+                self.player.take_damage(10)
 
         self.animate(dt)
 
-running = True
+def draw_timer(surface, seconds):
+    font = pygame.font.Font(None, 36)
+    mins = int(seconds) // 60
+    secs = int(seconds) % 60
+    text = font.render(f"{mins:02}:{secs:02}", True, (255, 255, 255))
+    rect = text.get_frect(topright = (WINDOW_WIDTH - 20, 20))
+    surface.blit(text, rect)
 
-player = Player(pygame.sprite.Group())
-
-# starting position
-player.rect.centerx = 400
-player.rect.centery = 525
-
-farmer = Farmer(pygame.sprite.Group(), player)
-
-class Carrot(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        super().__init__()
-
-        self.image = pygame.image.load(
-            join('FarmGame', 'images', 'carrot.png')
-        ).convert_alpha()
-
-        self.image = pygame.transform.scale(self.image, (65, 65))
-
-        self.rect = self.image.get_rect(topleft=(x, y))
-
-    def draw(self, surface):
-        # Create glow
-        glow = pygame.Surface((80, 80), pygame.SRCALPHA)
-
-        pygame.draw.circle(
-            glow,
-            (255, 255, 0, 100),
-            (40, 40),
-            35
-        )
-
-        # Draw glow
-        surface.blit(
-            glow,
-            (self.rect.centerx - 40, self.rect.centery - 40)
-        )
-
-        # Draw carrot
-        surface.blit(self.image, self.rect)
 
 def draw_health_bar(surface, health, max_health):
     x = 20
@@ -438,73 +445,209 @@ def draw_carrot_counter(surface, amount):
 
     surface.blit(text, (60, 85))
 
-carrots = [
+class Carrot(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
 
-Carrot(600, 400),
-Carrot(300, 600),
-Carrot(800, 100),
-Carrot(1000, 500),
-Carrot(200, 300),
-Carrot(500, 100),
-Carrot(700, 600),
-Carrot(400, 300),
-Carrot(900, 400),
-Carrot(1100, 200),
-]
+        self.image = pygame.image.load(
+            join('FarmGame', 'images', 'carrot.png')
+        ).convert_alpha()
+
+        self.image = pygame.transform.scale(self.image, (65, 65))
+
+        self.rect = self.image.get_rect(topleft=(x, y))
+
+    def draw(self, surface):
+        # Create glow
+        glow = pygame.Surface((80, 80), pygame.SRCALPHA)
+
+        pygame.draw.circle(
+            glow,
+            (255, 255, 0, 100),
+            (40, 40),
+            35
+        )
+
+        # Draw glow
+        surface.blit(
+            glow,
+            (self.rect.centerx - 40, self.rect.centery - 40)
+        )
+
+        # Draw carrot
+        surface.blit(self.image, self.rect)
+
+
+
+def reset_game():
+    new_player_group = pygame.sprite.Group()
+    new_player = Player(new_player_group)
+    new_player.rect.center = (400, 525)
+    new_player.carrots_collected = 0          
+
+    new_enemy_group = pygame.sprite.Group()
+    new_farmer = Farmer(new_enemy_group, new_player)
+    new_farmer.rect.center = (1000, 470)
+    new_enemies = [new_farmer]
+
+    new_carrots = [
+        Carrot(600, 400),
+        Carrot(300, 600), 
+        Carrot(800, 100),
+        Carrot(1000, 500), 
+        Carrot(200, 300), 
+        Carrot(500, 100),
+        Carrot(700, 600), 
+        Carrot(400, 300), 
+        Carrot(900, 400),
+        Carrot(1100, 200),
+    ]
+
+    return new_player, new_player_group, new_enemies, new_carrots
+
+
+
+player, player_group, enemies, carrots = reset_game()
+game_state = 'playing'
+alive_time  = 0.0              
+running     = True
 
 print("Starting Game")
 while running:
     dt = clock.tick(60) / 1000
-    print("loop running")
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                player.attack()
-   
 
-    # Update player first
-    player.update(dt)
-    print(player.rect.center)
+            if game_state == "playing":
 
-    # Keep player inside the window
-    player.rect.clamp_ip(screen.get_rect())
-    for carrot in carrots[:]:
-        if player.rect.colliderect(carrot.rect):
-            carrots.remove(carrot)
-            player.carrots_collected += 1
+                alive_time =+ 1 / 60
 
+                if event.key == pygame.K_SPACE:
+                    player.dodge()
 
-    farmer.update(dt)
+                if event.key == pygame.K_RETURN:
+                    player.attack()
+                    swoosh_sound.play()
 
-    # Draw
+                if event.key == pygame.K_ESCAPE:
+                    game_state = 'paused'
+                    walk_channel.stop()
+
+            elif game_state == 'paused':
+
+                if event.key == pygame.K_ESCAPE:
+                    game_state = 'playing'
+
+                if event.key == pygame.K_r:
+                    player, player_group, enemies, carrots = reset_game()
+                    game_state = 'playing'
+                    alive_time = 0.0
+
+            elif game_state == 'game_over':      
+                   
+                if event.key == pygame.K_r:
+                    player, player_group, enemies, carrots = reset_game()
+                    game_state = 'playing'
+                    alive_time = 0.0
+
+                if event.key == pygame.K_ESCAPE:
+                
+                    running = False
+
+            elif game_state == 'level_complete':    
+
+                if event.key == pygame.K_RETURN:
+                    player, player_group, enemies, carrots = reset_game()
+                    game_state = 'playing'
+                    alive_time = 0.0
+
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+
+    
+    if game_state == 'playing':
+        alive_time += dt
+
+        player.update(dt, enemies)           
+        player.rect.clamp_ip(screen.get_rect())
+
+        for enemy in enemies:
+            enemy.update(dt)                   
+
+        # collect carrots
+        for carrot in carrots[:]:
+            if player.rect.colliderect(carrot.rect):
+                player.carrots_collected += 1
+                player.health = min(player.health + 5, player.max_health)
+                carrots.remove(carrot)
+
+        
+        if player.carrots_collected >= 10:
+            if enemy.health <= 0: 
+                game_state = 'level_complete'
+            victory_sound.play()
+
+        if player.health <= 0:
+            game_state = 'game_over'         
+            game_over_sound.play()
+
+    
     screen.fill((30, 30, 30))
     screen.blit(background, (0, 0))
     screen.blit(player.image, player.rect)
 
-    if not farmer.dead:
-        screen.blit(farmer.image, farmer.rect)
-        draw_farmer_health_bar(screen, farmer)
-
-    draw_health_bar(
-        screen,
-        player.health,
-        player.max_health
-    )
-
-    draw_carrot_counter(
-        screen,
-        player.carrots_collected
-    )
-
+    for enemy in enemies:
+        if not enemy.dead:
+            screen.blit(enemy.image, enemy.rect)
+            draw_farmer_health_bar(screen, enemy)
 
     for carrot in carrots:
         carrot.draw(screen)
 
+    draw_health_bar(screen, player.health, player.max_health)
+    draw_carrot_counter(screen, player.carrots_collected)
+    draw_timer(screen, alive_time)
+
+    
+    if game_state == 'paused':
+
+        font = pygame.font.Font(None, 72)
+        small = pygame.font.Font(None, 36)
+
+        overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 140))
+
+        screen.blit(overlay, (0, 0))
+        screen.blit(font.render("PAUSED", True, (255, 255, 255)),  (540, 280))
+        screen.blit(small.render("ESC resume   R restart", True, (200, 200, 200)), (450, 370))
+
+    elif game_state == 'game_over':
+
+        font = pygame.font.Font(None, 72)
+        small = pygame.font.Font(None, 36)
+        overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.SRCALPHA)
+
+        overlay.fill((0, 0, 0, 160))
+
+        screen.blit(overlay, (0, 0))
+        screen.blit(font.render("GAME OVER", True, (220, 40, 40)),  (480, 280))
+        screen.blit(small.render("R restart   ESC quit", True, (200, 200, 200)), (490, 370))
+
+    elif game_state == 'level_complete':
+        font = pygame.font.Font(None, 72)
+        small = pygame.font.Font(None, 36)
+
+        overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 160))
+
+        screen.blit(overlay, (0, 0))
+        screen.blit(font.render("YOU WIN!", True, (50, 220, 50)),   (520, 280))
+        screen.blit(small.render("ENTER play again   ESC quit", True, (200, 200, 200)), (430, 370))
+
     pygame.display.update()
 
-    print(farmer.rect.center, player.rect.center)
-
 pygame.quit()
-
