@@ -8,7 +8,7 @@ class Background(pygame.sprite.Sprite): #makes backround and moves everything wh
         super().__init__(groups)
         self.image = surf
         self.rect = self.image.get_frect(center = (WINDOW_WIDTH/2,WINDOW_HEIGHT/2))
-    def move_bg(self,player,dt, all_sprites):
+    def move_bg(self,player,dt, all_sprites): #useless right now but mimics a moving camera
         for spr in all_sprites:
             if spr != player:
                 if hasattr(spr, "rect"):

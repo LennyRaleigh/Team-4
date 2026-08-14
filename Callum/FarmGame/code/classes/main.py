@@ -31,6 +31,7 @@ swoosh_sound = pygame.mixer.Sound(os.path.join(AUDIO_DIR, 'universfield-swoosh-0
 walk_sound = pygame.mixer.Sound(os.path.join(AUDIO_DIR, 'joentnt-walk-on-grass-1-291984.mp3'))
 game_over_sound = pygame.mixer.Sound(os.path.join(AUDIO_DIR, 'lesiakower-8-bit-game-over-sound-effect-331435.mp3'))
 victory_sound = pygame.mixer.Sound(os.path.join(AUDIO_DIR, 'Fortnite Victory Royale - QuickSounds.com.mp3'))
+fox_attack = pygame.mixer.Sound(os.path.join(AUDIO_DIR,'daviddumaisaudio-small-monster-attack-195712.mp3'))
 walk_channel = pygame.mixer.Channel(0)
 
 # Level definitions — add new levels by extending this list
@@ -43,6 +44,8 @@ LEVELS = [
         'enemy_health': 60,
         'enemy_damage': 3,
         'enemy_speed': 100,
+        'enemy_sound': None,
+        'background_music': None,
         'carrots': [(200, 200), (400, 100), (600, 300), (900, 200), (300, 500)],
         'cutscene': 'cutscene-1',
     },
@@ -54,6 +57,8 @@ LEVELS = [
         'enemy_health': 100,
         'enemy_damage': 5,
         'enemy_speed': 150,
+        'enemy_sound': fox_attack,
+        'background_music': None,
         'carrots': [(100, 150), (500, 200), (700, 400), (300, 600), (1000, 300), (600, 500),(1100, 400)],
         'cutscene': 'cutscene-2',
     },
@@ -154,7 +159,7 @@ while running:
                 if event.key == pygame.K_ESCAPE:
                     running = False
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.K_RETURN:
             if event.button == 1 and game_state == "playing":
                 player.attack()
                 swoosh_sound.play()
@@ -213,6 +218,8 @@ while running:
                 if isinstance(enemy, Enemies):
                     if player.rect.colliderect(enemy.rect):
                         player.take_damage(LEVELS[level-1]['enemy_damage'])
+                        if LEVELS[level-1]['enemy_sound'] != None:
+                            walk_channel.play(LEVELS[level-1]['enemy_sound'])
                         if player.health <= 0:
                             game_state = "game_over"
                             walk_channel.stop()
