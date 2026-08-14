@@ -159,10 +159,10 @@ while running:
                 if event.key == pygame.K_ESCAPE:
                     running = False
 
-        if event.type == pygame.K_RETURN:
-            if event.button == 1 and game_state == "playing":
-                player.attack()
-                swoosh_sound.play()
+        if pygame.key.get_pressed()[pygame.K_RETURN] and game_state == "playing":
+            #if event.button == 1 and game_state == "playing":
+            player.attack()
+            swoosh_sound.play()
 
     if game_state == "main_menu":
         display_surface.fill("#A6D6EB")
