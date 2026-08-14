@@ -1,6 +1,11 @@
 import pygame
 from creature import Creature
 from os.path import join
+import os
+_DIR = os.path.dirname(os.path.abspath(__file__))
+IMG_DIR = os.path.join(_DIR, '..', '..', 'images')
+
+WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 720
 
 class Player(Creature):
 
@@ -12,14 +17,13 @@ class Player(Creature):
     FRAME_SIZE = 64
     DISPLAY_SIZE = (100, 100)
 
-    def __init__(self, groups,image,pos):
-        super().__init__(groups,image)
+    def __init__(self, groups, image, pos):
+        super().__init__(groups, image)
         sheet = pygame.image.load(
-        join("FarmGame\images\sprite-64x64px-8f-sheet.png")
+            os.path.join(IMG_DIR, 'sprite-64x64px-8f-sheet.png')
         ).convert_alpha()
 
         self.frames_right = []
-
         for col, row in self.FRAME_COORDS:
             rect = pygame.Rect(
                 col * self.FRAME_SIZE,
@@ -27,21 +31,18 @@ class Player(Creature):
                 self.FRAME_SIZE,
                 self.FRAME_SIZE
             )
-
             frame = sheet.subsurface(rect).copy()
             frame = pygame.transform.scale(frame, self.DISPLAY_SIZE)
             self.frames_right.append(frame)
-        
 
         self.frame_index = 0
         self.animation_timer = 0
         self.animation_speed = 6
 
         self.right_image = self.frames_right[self.frame_index]
-        #self.right_image = pygame.transform.scale_by(self.right_image,2)
         self.image = self.right_image
-        self.base_image = self. right_image
-        self.rect = self.image.get_frect(center = (pos))
+        self.base_image = self.right_image
+        self.rect = self.image.get_frect(center=pos)
         self.speed = 300
         self.dodge_speed = 1000
 
@@ -65,44 +66,47 @@ class Player(Creature):
         self.attack_cooldown_max = 30
         self.enemies_hit = []
 
-        
-    def update(self,dt):
+        self.facing_right = True
+
+    def update(self, dt):
         keys = pygame.key.get_pressed()
         self.direction.x = int(keys[pygame.K_d]) - int(keys[pygame.K_a])
         self.direction.y = int(keys[pygame.K_s]) - int(keys[pygame.K_w])
+
+        if self.direction.x > 0:
+            self.facing_right = True
+        elif self.direction.x < 0:
+            self.facing_right = False
+
         self.direction = self.direction.normalize() if self.direction else self.direction
+
         if pygame.key.get_just_pressed()[pygame.K_SPACE]:
             self.dodge()
-    
-        if pygame.mouse.get_just_pressed()[0]:
-            print("attack")
 
         if self.damage_cooldown > 0:
-            self.damage_cooldown -= 1*dt*100
+            self.damage_cooldown -= 1 * dt * 100
 
         if self.dodge_timer > 0:
-            self.dodge_timer -= 1*dt*100
+            self.dodge_timer -= 1 * dt * 100
         else:
             self.dodging = False
 
         if self.dodge_cooldown > 0:
-            self.dodge_cooldown -= 1*dt*100
+            self.dodge_cooldown -= 1 * dt * 100
 
         if self.attack_timer > 0:
-            self.attack_timer -= 1*dt*100
-
+            self.attack_timer -= 1 * dt * 100
             if self.attack_timer <= 0:
                 self.attacking = False
         else:
             self.attacking = False
 
         if self.attack_cooldown > 0:
-            self.attack_cooldown -= 1*dt*100
+            self.attack_cooldown -= 1 * dt * 100
 
-
-        if self.direction != (0,0):
-            self.animation_timer += 1 * dt *100
-            if self.animation_timer  >= self.animation_speed :
+        if self.direction != (0, 0):
+            self.animation_timer += 1 * dt * 100
+            if self.animation_timer >= self.animation_speed:
                 self.animation_timer = 0
                 self.frame_index = (self.frame_index + 1) % len(self.frames_right)
         else:
@@ -110,18 +114,38 @@ class Player(Creature):
             self.animation_timer = 0
 
         self.right_image = self.frames_right[self.frame_index]
-
         self.surf_direction()
+
         if self.dodging:
             self.rect.center += self.direction * self.dodge_speed * dt
         else:
             self.rect.center += self.direction * self.speed * dt
+
+        # clamp to screen bounds
+        self.rect.x = max(0, min(self.rect.x, WINDOW_WIDTH - self.rect.width))
+        self.rect.y = max(0, min(self.rect.y, WINDOW_HEIGHT - self.rect.height))
 
     def dodge(self):
         if self.dodge_cooldown <= 0:
             self.dodging = True
             self.dodge_timer = 15
             self.dodge_cooldown = 60
+
+    def attack(self):
+        if self.attack_cooldown <= 0:
+            self.attacking = True
+            self.attack_timer = self.attack_duration
+            self.attack_cooldown = self.attack_cooldown_max
+            self.enemies_hit = []
+
+    def get_attack_rect(self):
+        width, height = self.attack_size
+        if self.facing_right:
+            x = self.rect.right + self.attack_range - width
+        else:
+            x = self.rect.left - self.attack_range
+        y = self.rect.centery - height // 2
+        return pygame.Rect(x, y, width, height)
 
     def take_damage(self, amount):
         if self.damage_cooldown <= 0 and not self.dodging:
