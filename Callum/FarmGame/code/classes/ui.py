@@ -49,7 +49,7 @@ def draw_carrot_counter(surface, amount,max):
         (35, 35)
     )
 
-    surface.blit(carrot, (20, 80))
+    surface.blit(carrot, (20, 60))
 
     text = font.render(
         f"x {amount}/{max}",
@@ -57,7 +57,7 @@ def draw_carrot_counter(surface, amount,max):
         (255, 255, 255)
     )
 
-    surface.blit(text, (60, 85))
+    surface.blit(text, (60, 65))
 
 def draw_timer(surface, seconds):
     font = pygame.font.Font(None, 36)
@@ -150,12 +150,14 @@ def draw_game_over_screen(surface, carrots_collected, elapsed_seconds):
     )
     surface.blit(prompt_text, prompt_rect)
 
-def draw_health_bar(surface, health, max_health):
+def draw_health_bar(surface, health, max_health,border):
     x = 20
     y = 20
     width = 250
     height = 30
 
+    surface.blit(pygame.transform.scale(border,(width+40,height+90)),(x-20,y-20))
+    
     pygame.draw.rect(
         surface,
         (40, 40, 40),
@@ -186,3 +188,6 @@ def draw_health_bar(surface, health, max_health):
         2,
         border_radius=8
     )
+
+
+#def draw_controls(surface):

@@ -15,7 +15,7 @@ clock = pygame.time.Clock()
 running = True
 game_state = "main_menu"
 alive_time = 0.0
-level = 1
+level = 0
 
 from background import Background
 from draw_order import YAwareGroup
@@ -49,12 +49,12 @@ LEVELS = [
     {
         'background': 'level2.png',
         'enemy_image': 'fox.png',
-        'enemy_count': 5,
+        'enemy_count': 3,
         'enemy_scale': 0.2,
         'enemy_health': 100,
         'enemy_damage': 5,
         'enemy_speed': 150,
-        'carrots': [(100, 150), (500, 200), (700, 400), (300, 600), (1000, 300), (600, 500)],
+        'carrots': [(100, 150), (500, 200), (700, 400), (300, 600), (1000, 300), (600, 500),(1100, 400)],
         'cutscene': 'cutscene-2',
     },
 ]
@@ -64,6 +64,7 @@ all_sprites = pygame.sprite.Group()
 creature_sprites = pygame.sprite.Group()
 
 background_surf = pygame.image.load(os.path.join(IMG_DIR, LEVELS[0]['background'])).convert_alpha()
+ui_border = pygame.image.load(os.path.join(IMG_DIR,'ui border.png')).convert_alpha()
 
 player = Player(
     (all_sprites, creature_sprites),
@@ -118,7 +119,7 @@ def reset_game():
 pygame.mouse.set_visible(False)
 cursor_img = pygame.image.load(os.path.join(IMG_DIR, 'cursor.png')).convert_alpha()
 cursor_img = pygame.transform.scale_by(cursor_img, 3)
-
+in_level = False
 
 while running:
     dt = clock.tick(60) / 1000
@@ -137,6 +138,7 @@ while running:
                     reset_game()
                     game_state = "playing"
                     walk_channel.stop()
+                    in_level = True
                 if event.key == pygame.K_ESCAPE:
                     running = False
 
@@ -174,8 +176,10 @@ while running:
                     button.highlight(False)
 
         if menu.play_button.rect.collidepoint(mouse_pos) and mouse_button[0]:
-            level = 1
-            game_state = "cutscene"
+            if not in_level:
+                level = 1
+                game_state = "cutscene"
+            else: game_state = "playing"
 
         if menu.quit_button.rect.collidepoint(mouse_pos) and mouse_button[0]:
             running = False
@@ -189,6 +193,7 @@ while running:
         elif result == "finished" or result == "skipped":
             load_level(level)
             game_state = "playing"
+            in_level = True
 
     else:
         if game_state == "playing":
@@ -212,6 +217,7 @@ while running:
                             game_state = "game_over"
                             walk_channel.stop()
                             game_over_sound.play()
+                            in_level = False
 
             # player attack hits enemies
             if player.attacking:
@@ -241,6 +247,7 @@ while running:
                 victory_sound.play()
                 #if level < len(LEVELS):
                 game_state = "level_complete"
+                in_level = False
                 #else:
                 #    game_state = "game_complete"
 
@@ -263,9 +270,10 @@ while running:
             if isinstance(enemy, Enemies):
                 enemy.draw_health_bar(display_surface)
 
-        draw_health_bar(display_surface, player.health, player.max_health)
+        draw_health_bar(display_surface, player.health, player.max_health,ui_border)
         draw_carrot_counter(display_surface, player.carrots_collected, len(LEVELS[level - 1]['carrots']))
-        draw_timer(display_surface, alive_time)
+        if level != 1:
+            draw_timer(display_surface, alive_time)
 
         if game_state == "game_over":
             draw_game_over_screen(display_surface, player.carrots_collected, alive_time)
