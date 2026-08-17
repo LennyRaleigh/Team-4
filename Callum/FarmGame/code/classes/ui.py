@@ -191,3 +191,31 @@ def draw_health_bar(surface, health, max_health,border):
 
 
 #def draw_controls(surface):
+
+
+def draw_game_complete_screen(surface, elapsed_seconds):
+    overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.SRCALPHA)
+    overlay.fill((0, 0, 0, 180))
+    surface.blit(overlay, (0, 0))
+
+    title_font = pygame.font.Font(None, 110)
+    info_font  = pygame.font.Font(None, 44)
+    small_font = pygame.font.Font(None, 36)
+
+    title_text = title_font.render("YOU WIN!", True, (255, 215, 0))
+    title_rect = title_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 80))
+    surface.blit(title_text, title_rect)
+
+    sub_text = info_font.render("You defeated the Farmer Boss!", True, (255, 255, 200))
+    sub_rect = sub_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+    surface.blit(sub_text, sub_rect)
+
+    mins = int(elapsed_seconds) // 60
+    secs = int(elapsed_seconds) % 60
+    time_text = info_font.render(f"Total time: {mins:02}:{secs:02}", True, (255, 255, 255))
+    time_rect = time_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 55))
+    surface.blit(time_text, time_rect)
+
+    prompt_text = small_font.render("Press ESC to quit", True, (200, 200, 200))
+    prompt_rect = prompt_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 110))
+    surface.blit(prompt_text, prompt_rect)
