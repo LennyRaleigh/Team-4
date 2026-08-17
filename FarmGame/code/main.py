@@ -8,14 +8,18 @@ WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 720
 display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Borris the Bunny")
 
-swoosh_sound = pygame.mixer.Sound(join("audio/universfield-swoosh-015-383769.mp3"))
-walk_sound = pygame.mixer.Sound(join("audio/joentnt-walk-on-grass-1-291984.mp3"))
-claw_sound = pygame.mixer.Sound(join("audio/daviddumaisaudio-small-monster-attack-195712.mp3"))
-game_over_sound = pygame.mixer.Sound(join("audio/lesiakower-8-bit-game-over-sound-effect-331435.mp3"))
-victory_sound = pygame.mixer.Sound(join("audio/Fortnite Victory Royale - QuickSounds.com.mp3"))
+swoosh_sound = pygame.mixer.Sound(join("FarmGame/audio/universfield-swoosh-015-383769.mp3"))
+walk_sound = pygame.mixer.Sound(join("FarmGame/audio/joentnt-walk-on-grass-1-291984.mp3"))
+claw_sound = pygame.mixer.Sound(join("FarmGame/audio/daviddumaisaudio-small-monster-attack-195712.mp3"))
+game_over_sound = pygame.mixer.Sound(join("FarmGame/audio/lesiakower-8-bit-game-over-sound-effect-331435.mp3"))
+victory_sound = pygame.mixer.Sound(join("FarmGame/audio/Fortnite Victory Royale - QuickSounds.com.mp3"))
 walk_channel = pygame.mixer.Channel(0)
 
-background = pygame.image.load(join("images/level2.png")).convert()
+pygame.mixer.music.load(join("FarmGame/audio/1-03. Subwoofer Lullaby.mp3"))
+pygame.mixer.music.set_volume(3)
+pygame.mixer.music.play(-1)
+
+background = pygame.image.load(join("FarmGame/images/level2.png")).convert()
 background = pygame.transform.scale(background, (WINDOW_WIDTH, WINDOW_HEIGHT))
 
 
@@ -32,7 +36,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         sheet = pygame.image.load(
-            join("images/rabbitSprite.png")
+            join("FarmGame/images/rabbitSprite.png")
         ).convert_alpha()
 
         self.frames_right = []
@@ -71,6 +75,9 @@ class Player(pygame.sprite.Sprite):
         self.carrots_collected = 0
 
         self.damage_cooldown = 0
+
+        self.knockback = pygame.math.Vector2(0, 0)
+        self.knockback_friction = 0.75
 
         self.dodging = False
         self.dodge_timer = 0
@@ -150,15 +157,32 @@ class Player(pygame.sprite.Sprite):
 
         return pygame.Rect(x, y, width, height)
 
-    def take_damage(self, amount):
+    def take_damage(self, amount, source_rect=None):
         if self.damage_cooldown <= 0 and not self.dodging:
             self.health -= amount
             self.damage_cooldown = 30
             claw_sound.play()
 
+            if source_rect:
+                direction = pygame.math.Vector2(
+                    self.rect.centerx - source_rect.centerx,
+                    self.rect.centery - source_rect.centery
+                )
+                if direction.length() > 0:
+                    self.knockback = direction.normalize() * 12
+
     def update(self):
         if self.damage_cooldown > 0:
             self.damage_cooldown -= 1
+
+        if self.knockback.length() > 0.5:
+            self.rect.x += int(self.knockback.x)
+            self.rect.y += int(self.knockback.y)
+            self.rect.x = max(0, min(self.rect.x, WINDOW_WIDTH - self.rect.width))
+            self.rect.y = max(0, min(self.rect.y, WINDOW_HEIGHT - self.rect.height))
+            self.knockback *= self.knockback_friction
+        else:
+            self.knockback = pygame.math.Vector2(0, 0)
 
         if self.dodge_timer > 0:
             self.dodge_timer -= 1
@@ -201,7 +225,7 @@ class Enemy:
 
     def __init__(self, x, y, spawn_delay=0):
         sheet = pygame.image.load(
-            join("images/fox-sheet.png")
+            join("FarmGame/images/fox-sheet.png")
         ).convert_alpha()
 
         self.frames_left = []
@@ -330,7 +354,7 @@ class Enemy:
 class Carrot:
     def __init__(self, x, y):
         self.image = pygame.image.load(
-            join("images/carrot.png")
+            join("FarmGame/images/carrot.png")
         ).convert_alpha()
 
         self.image = pygame.transform.scale(
@@ -390,17 +414,19 @@ def draw_health_bar(surface, health, max_health):
     pygame.draw.rect(
         surface,
         (255, 255, 255),
+    pygame.draw.rect(
+        surface,
+        (255, 255, 255),
         (x, y, width, height),
         2,
         border_radius=8
     )
 
-
-def draw_carrot_counter(surface, amount):
+    surface.blit(ui_border, (x - 20, y - 15))raw_carrot_counter(surface, amount):
     font = pygame.font.Font(None, 36)
 
     carrot = pygame.image.load(
-        join("images/carrot.png")
+        join("FarmGame/images/carrot.png")
     ).convert_alpha()
 
     carrot = pygame.transform.scale(
@@ -545,8 +571,8 @@ def reset_game():
 
     new_enemies = [
         Enemy(1100, 50),
-        Enemy(100, 50),
-        Enemy(1100, 600)
+        Enemy(100, 50, spawn_delay=4),
+        Enemy(1100, 600, spawn_delay=8)
     ]
 
     new_carrots = [
@@ -637,9 +663,9 @@ while running:
 
             enemy.update(player, enemies)
 
-            if player.rect.colliderect(enemy.rect):
+            if enemy.spawn_delay <= 0 and player.rect.colliderect(enemy.rect):
 
-                player.take_damage(5)
+                player.take_damage(5, enemy.rect)
 
                 if player.health <= 0:
                     game_state = "game_over"
@@ -650,7 +676,7 @@ while running:
             attack_rect = player.get_attack_rect()
 
             for enemy in enemies:
-                if enemy not in player.enemies_hit and attack_rect.colliderect(enemy.rect):
+                if enemy.spawn_delay <= 0 and enemy not in player.enemies_hit and attack_rect.colliderect(enemy.rect):
                     enemy.take_damage(player.attack_damage)
                     player.enemies_hit.append(enemy)
 
@@ -690,7 +716,8 @@ while running:
         display_surface.blit(swipe, attack_rect)
 
     for enemy in enemies:
-        enemy.draw(display_surface)
+        if enemy.spawn_delay <= 0:
+            enemy.draw(display_surface)
 
     draw_health_bar(
         display_surface,
@@ -717,4 +744,4 @@ while running:
     pygame.display.update()
     clock.tick(60)
 
-pygame.quit()
+pygame.quit()   
