@@ -11,9 +11,11 @@ from creature import Creature
 
 
 class Enemies(Creature):
-    def __init__(self, groups, image, scale, pos,health,speed):
+    def __init__(self, groups, image, scale, pos,health,speed,facing_right):
         super().__init__(groups, image)
         self.right_image = pygame.transform.scale_by(self.right_image, scale)
+        if not facing_right:
+            self.right_image = pygame.transform.flip(self.right_image,True,False)
         self.image = self.right_image
         self.rect = self.image.get_frect(center=pos)
         self.speed = speed

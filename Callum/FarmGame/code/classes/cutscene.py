@@ -35,7 +35,7 @@ def play_cutscene(surface, frames_dir, fps=10, skip_key=pygame.K_e):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return "quit"
-            if event.type == pygame.KEYDOWN and event.key == skip_key:
+            if event.type == pygame.KEYDOWN:
                 return "skipped"
 
         clock.tick(fps)

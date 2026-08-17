@@ -191,3 +191,39 @@ def draw_health_bar(surface, health, max_health,border):
 
 
 #def draw_controls(surface):
+
+def draw_game_complete_screen(surface, elapsed_seconds):
+    overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.SRCALPHA)
+    overlay.fill((0, 0, 0, 170))
+    surface.blit(overlay, (0, 0))
+
+    title_font = pygame.font.Font(None, 96)
+    info_font = pygame.font.Font(None, 40)
+
+    title_text = title_font.render("GAME COMPLETE!", True, (80, 220, 80))
+    title_rect = title_text.get_rect(
+        center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 60)
+    )
+    surface.blit(title_text, title_rect)
+
+    mins = int(elapsed_seconds) // 60
+    secs = int(elapsed_seconds) % 60
+    time_text = info_font.render(
+        f"Time: {mins:02}:{secs:02}",
+        True,
+        (255, 255, 255)
+    )
+    time_rect = time_text.get_rect(
+        center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 10)
+    )
+    surface.blit(time_text, time_rect)
+
+    prompt_text = info_font.render(
+        "Press ENTER to Continue or ESC to Quit",
+        True,
+        (200, 200, 200)
+    )
+    prompt_rect = prompt_text.get_rect(
+        center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 65)
+    )
+    surface.blit(prompt_text, prompt_rect)

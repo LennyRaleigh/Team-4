@@ -22,8 +22,9 @@ from draw_order import YAwareGroup
 import menu
 from Enemy import Enemies, give_variables
 from Player import Player
-from ui import Carrot, draw_health_bar, draw_carrot_counter, draw_game_over_screen, draw_timer, draw_level_complete_screen#, draw_game_complete_screen
+from ui import Carrot, draw_health_bar, draw_carrot_counter, draw_game_over_screen, draw_timer, draw_level_complete_screen, draw_game_complete_screen
 from cutscene import play_cutscene
+from farmer import Farmer, give_variables as farmer_player_pos
 
 
 pygame.mixer.init()
@@ -32,7 +33,13 @@ walk_sound = pygame.mixer.Sound(os.path.join(AUDIO_DIR, 'joentnt-walk-on-grass-1
 game_over_sound = pygame.mixer.Sound(os.path.join(AUDIO_DIR, 'lesiakower-8-bit-game-over-sound-effect-331435.mp3'))
 victory_sound = pygame.mixer.Sound(os.path.join(AUDIO_DIR, 'Fortnite Victory Royale - QuickSounds.com.mp3'))
 fox_attack = pygame.mixer.Sound(os.path.join(AUDIO_DIR,'daviddumaisaudio-small-monster-attack-195712.mp3'))
+farm_attack = pygame.mixer.Sound(os.path.join(AUDIO_DIR,'farmer-attack.mp3'))
+background_sound = pygame.mixer.Sound(os.path.join(AUDIO_DIR,'1-03. Subwoofer Lullaby.mp3'))
+pig_sound = pygame.mixer.Sound(os.path.join(AUDIO_DIR, 'pig_oink.mp3'))
 walk_channel = pygame.mixer.Channel(0)
+
+background_sound.set_volume(1.5)
+background_sound.play(loops=1)
 
 # Level definitions — add new levels by extending this list
 LEVELS = [
@@ -44,8 +51,9 @@ LEVELS = [
         'enemy_health': 60,
         'enemy_damage': 3,
         'enemy_speed': 100,
-        'enemy_sound': None,
+        'enemy_sound': pig_sound,
         'background_music': None,
+        'facing_right':True,
         'carrots': [(200, 200), (400, 100), (600, 300), (900, 200), (300, 500)],
         'cutscene': 'cutscene-1',
     },
@@ -59,8 +67,20 @@ LEVELS = [
         'enemy_speed': 150,
         'enemy_sound': fox_attack,
         'background_music': None,
+        'facing_right':False,
         'carrots': [(100, 150), (500, 200), (700, 400), (300, 600), (1000, 300), (600, 500),(1100, 400)],
         'cutscene': 'cutscene-2',
+    },
+    {
+        'background': 'level2.png',
+        'enemy_image': 'farmer.png',
+        'enemy_damage': 10,
+        'enemy_walk': "farmer.sprite.sheet.png",
+        'enemy_attack': "farmer.attack.sprite.sheet3.png",
+        'enemy_sound': farm_attack,
+        'background_music': None,
+        'carrots': [(100, 150), (500, 200), (700, 400), (300, 600), (1000, 300), (600, 500),(1100, 400)],
+        'cutscene': 'cutscene-3',
     },
 ]
 
@@ -97,21 +117,32 @@ def load_level(n):
         (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)
     )
     background.__init__(background_surf, all_sprites)
-
     enemy_img = pygame.image.load(os.path.join(IMG_DIR, data['enemy_image'])).convert_alpha()
-    for _ in range(data['enemy_count']):
-        Enemies(
+    if level != 3:
+        for _ in range(data['enemy_count']):
+            Enemies(
+                (all_sprites, creature_sprites),
+                enemy_img,
+                data['enemy_scale'],
+                (random.randint(0, WINDOW_WIDTH), random.randint(0, WINDOW_HEIGHT)),
+                LEVELS[level-1]['enemy_health'],
+                LEVELS[level-1]['enemy_speed'],
+                LEVELS[level-1]['facing_right']
+            )
+    else: 
+        Farmer(
             (all_sprites, creature_sprites),
             enemy_img,
-            data['enemy_scale'],
-            (random.randint(0, WINDOW_WIDTH), random.randint(0, WINDOW_HEIGHT)),
-            LEVELS[level-1]['enemy_health'],
-            LEVELS[level-1]['enemy_speed']
-        )
+            pygame.image.load(os.path.join(IMG_DIR, data['enemy_walk'])).convert_alpha(),
+            pygame.image.load(os.path.join(IMG_DIR, data['enemy_attack'])).convert_alpha(),
+            LEVELS[level-1]['enemy_sound']
 
+
+        )
     sprites = YAwareGroup(creature_sprites)
     carrots = [Carrot(x, y) for x, y in data['carrots']]
     alive_time = 0.0
+    
 
 
 def reset_game():
@@ -129,6 +160,7 @@ in_level = False
 while running:
     dt = clock.tick(60) / 1000
     give_variables(player, creature_sprites)
+    farmer_player_pos(player)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -160,7 +192,6 @@ while running:
                     running = False
 
         if pygame.key.get_pressed()[pygame.K_RETURN] and game_state == "playing":
-            #if event.button == 1 and game_state == "playing":
             player.attack()
             swoosh_sound.play()
 
@@ -191,7 +222,7 @@ while running:
 
     elif game_state == "cutscene":
         cutscene_dir = os.path.join(CUT_DIR, LEVELS[level - 1]['cutscene'])
-        result = play_cutscene(display_surface, cutscene_dir) if level == 1 else "finished"
+        result = play_cutscene(display_surface, cutscene_dir) if level == 1 or level == 2 else "finished"
         clock.tick()  # discard dt that built up during cutscene
         if result == "quit":
             running = False
@@ -215,7 +246,7 @@ while running:
 
             # player-enemy collision
             for enemy in list(creature_sprites):
-                if isinstance(enemy, Enemies):
+                if isinstance(enemy, (Enemies,Farmer)):
                     if player.rect.colliderect(enemy.rect):
                         player.take_damage(LEVELS[level-1]['enemy_damage'])
                         if LEVELS[level-1]['enemy_sound'] != None:
@@ -230,14 +261,14 @@ while running:
             if player.attacking:
                 attack_rect = player.get_attack_rect()
                 for enemy in list(creature_sprites):
-                    if isinstance(enemy, Enemies):
+                    if isinstance(enemy, (Enemies,Farmer)):
                         if enemy not in player.enemies_hit and attack_rect.colliderect(enemy.rect):
                             enemy.take_damage(player.attack_damage)
                             player.enemies_hit.append(enemy)
 
             # remove dead enemies
             for enemy in list(creature_sprites):
-                if isinstance(enemy, Enemies) and enemy.health <= 0:
+                if isinstance(enemy, (Enemies,Farmer)) and enemy.health <= 0:
                     enemy.kill()
 
             # carrot collection
@@ -248,15 +279,15 @@ while running:
                     carrots.remove(carrot)
 
             # win condition
-            enemies_alive = [e for e in creature_sprites if isinstance(e, Enemies)]
+            enemies_alive = [e for e in creature_sprites if isinstance(e, (Enemies,Farmer))]
             if not enemies_alive and not carrots:
                 walk_channel.stop()
                 victory_sound.play()
-                #if level < len(LEVELS):
-                game_state = "level_complete"
-                in_level = False
-                #else:
-                #    game_state = "game_complete"
+                if level < len(LEVELS):
+                    game_state = "level_complete"
+                    in_level = False
+                else:
+                    game_state = "game_complete"
 
         # draw
         display_surface.fill("#2FC66B")
@@ -274,7 +305,7 @@ while running:
             display_surface.blit(swipe, attack_rect)
 
         for enemy in creature_sprites:
-            if isinstance(enemy, Enemies):
+            if isinstance(enemy, (Enemies,Farmer)):
                 enemy.draw_health_bar(display_surface)
 
         draw_health_bar(display_surface, player.health, player.max_health,ui_border)
@@ -288,8 +319,8 @@ while running:
         if game_state == "level_complete":
             draw_level_complete_screen(display_surface, alive_time)
 
-        #if game_state == "game_complete":
-        #    draw_game_complete_screen(display_surface, alive_time)
+        if game_state == "game_complete":
+            draw_game_complete_screen(display_surface, alive_time)
 
     pygame.display.update()
 
