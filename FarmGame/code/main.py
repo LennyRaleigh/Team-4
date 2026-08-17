@@ -8,19 +8,18 @@ WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 720
 display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Borris the Bunny")
 
-swoosh_sound = pygame.mixer.Sound(join("FarmGame/audio/universfield-swoosh-015-383769.mp3"))
-walk_sound = pygame.mixer.Sound(join("FarmGame/audio/joentnt-walk-on-grass-1-291984.mp3"))
-claw_sound = pygame.mixer.Sound(join("FarmGame/audio/daviddumaisaudio-small-monster-attack-195712.mp3"))
+swoosh_sound    = pygame.mixer.Sound(join("FarmGame/audio/universfield-swoosh-015-383769.mp3"))
+walk_sound      = pygame.mixer.Sound(join("FarmGame/audio/joentnt-walk-on-grass-1-291984.mp3"))
+claw_sound      = pygame.mixer.Sound(join("FarmGame/audio/daviddumaisaudio-small-monster-attack-195712.mp3"))
 game_over_sound = pygame.mixer.Sound(join("FarmGame/audio/lesiakower-8-bit-game-over-sound-effect-331435.mp3"))
-victory_sound = pygame.mixer.Sound(join("FarmGame/audio/Fortnite Victory Royale - QuickSounds.com.mp3"))
-walk_channel = pygame.mixer.Channel(0)
-
-pygame.mixer.music.load(join("FarmGame/audio/1-03. Subwoofer Lullaby.mp3"))
-pygame.mixer.music.set_volume(3)
-pygame.mixer.music.play(-1)
+victory_sound   = pygame.mixer.Sound(join("FarmGame/audio/Fortnite Victory Royale - QuickSounds.com.mp3"))
+walk_channel    = pygame.mixer.Channel(0)
 
 background = pygame.image.load(join("FarmGame/images/level2.png")).convert()
 background = pygame.transform.scale(background, (WINDOW_WIDTH, WINDOW_HEIGHT))
+
+# Load UI border image (used in draw_health_bar)
+ui_border = pygame.image.load(join("FarmGame/images/ui border.png")).convert_alpha()
 
 
 class Player(pygame.sprite.Sprite):
@@ -250,7 +249,7 @@ class Enemy:
         self.facing_right = True
         self.frame_index = 0
         self.animation_timer = 0
-        self.animation_speed = 8  # lower = faster bob
+        self.animation_speed = 8
 
         self.image = self.frames_right[self.frame_index]
         self.rect = self.image.get_rect(topleft=(x, y))
@@ -382,67 +381,73 @@ class Carrot:
         surface.blit(self.image, self.rect)
 
 
-def draw_health_bar(surface, health, max_health):
-    x = 20
-    y = 20
-    width = 250
-    height = 30
+def draw_ui_panel(surface, health, max_health, carrots):
+    # --- layout constants ---
+    PANEL_X      = 8
+    PANEL_Y      = 8
+    PANEL_W      = 280
+    PANEL_H      = 90
 
+    # health bar sits in the top half of the panel
+    BAR_X        = PANEL_X + 18
+    BAR_Y        = PANEL_Y + 14
+    BAR_W        = PANEL_W - 36
+    BAR_H        = 22
+
+    # carrot row sits in the bottom half
+    CARROT_Y     = PANEL_Y + 50
+
+    # 1. scale the wooden border to cover the whole panel
+    border_scaled = pygame.transform.scale(ui_border, (PANEL_W, PANEL_H))
+    surface.blit(border_scaled, (PANEL_X, PANEL_Y))
+
+    # 2. health bar background track
     pygame.draw.rect(
         surface,
         (40, 40, 40),
-        (x - 5, y - 5, width + 10, height + 10),
-        border_radius=10
+        (BAR_X - 2, BAR_Y - 2, BAR_W + 4, BAR_H + 4),
+        border_radius=6
     )
-
     pygame.draw.rect(
         surface,
         (150, 0, 0),
-        (x, y, width, height),
-        border_radius=8
+        (BAR_X, BAR_Y, BAR_W, BAR_H),
+        border_radius=5
     )
 
-    health_width = (health / max_health) * width
-
+    # 3. green fill proportional to current health
+    health_w = max(0, (health / max_health) * BAR_W)
     pygame.draw.rect(
         surface,
         (50, 220, 50),
-        (x, y, health_width, height),
-        border_radius=8
+        (BAR_X, BAR_Y, health_w, BAR_H),
+        border_radius=5
     )
 
+    # 4. white outline on bar
     pygame.draw.rect(
         surface,
         (255, 255, 255),
-    pygame.draw.rect(
-        surface,
-        (255, 255, 255),
-        (x, y, width, height),
+        (BAR_X, BAR_Y, BAR_W, BAR_H),
         2,
-        border_radius=8
+        border_radius=5
     )
 
-    surface.blit(ui_border, (x - 20, y - 15))raw_carrot_counter(surface, amount):
-    font = pygame.font.Font(None, 36)
+    # 5. heart label on the left of the bar
+    font_small = pygame.font.Font(None, 20)
+    hp_label = font_small.render("HP", True, (255, 255, 255))
+    surface.blit(hp_label, (BAR_X + 4, BAR_Y + 4))
 
-    carrot = pygame.image.load(
+    # 6. carrot icon + counter in the lower section
+    carrot_img = pygame.image.load(
         join("FarmGame/images/carrot.png")
     ).convert_alpha()
+    carrot_img = pygame.transform.scale(carrot_img, (28, 28))
+    surface.blit(carrot_img, (BAR_X, CARROT_Y))
 
-    carrot = pygame.transform.scale(
-        carrot,
-        (35, 35)
-    )
-
-    surface.blit(carrot, (20, 80))
-
-    text = font.render(
-        f"x {amount}/7",
-        True,
-        (255, 255, 255)
-    )
-
-    surface.blit(text, (60, 85))
+    font = pygame.font.Font(None, 30)
+    text = font.render(f"x {carrots} / 7", True, (255, 255, 255))
+    surface.blit(text, (BAR_X + 34, CARROT_Y + 4))
 
 
 def draw_timer(surface, seconds):
@@ -719,14 +724,10 @@ while running:
         if enemy.spawn_delay <= 0:
             enemy.draw(display_surface)
 
-    draw_health_bar(
+    draw_ui_panel(
         display_surface,
         player.health,
-        player.max_health
-    )
-
-    draw_carrot_counter(
-        display_surface,
+        player.max_health,
         player.carrots_collected
     )
 
@@ -744,4 +745,4 @@ while running:
     pygame.display.update()
     clock.tick(60)
 
-pygame.quit()   
+pygame.quit()
