@@ -5,7 +5,7 @@ WINDOW_WIDTH, WINDOW_HEIGHT = pygame.display.get_surface().get_size()
 
 
 def prepare_frame(img):
-    """Scale down if larger than window, preserving aspect ratio. Center on screen."""
+    #Scales down if larger than window, preserving aspect ratio. Center on screen.
     w, h = img.get_size()
     if w > WINDOW_WIDTH or h > WINDOW_HEIGHT:
         scale = min(WINDOW_WIDTH / w, WINDOW_HEIGHT / h)
@@ -15,7 +15,7 @@ def prepare_frame(img):
     return img, x, y
 
 
-def play_cutscene(surface, frames_dir, fps=10, skip_key=pygame.K_e):
+def play_cutscene(surface, frames_dir, fps=10):
     frames = sorted([
         f for f in os.listdir(frames_dir)
         if f.endswith('.png') or f.endswith('.jpg')

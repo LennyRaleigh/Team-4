@@ -72,14 +72,14 @@ LEVELS = [
         'cutscene': 'cutscene-2',
     },
     {
-        'background': 'level2.png',
+        'background': 'level3.png',
         'enemy_image': 'farmer.png',
         'enemy_damage': 10,
         'enemy_walk': "farmer.sprite.sheet.png",
         'enemy_attack': "farmer.attack.sprite.sheet3.png",
         'enemy_sound': farm_attack,
         'background_music': None,
-        'carrots': [(100, 150), (500, 200), (700, 400), (300, 600), (1000, 300), (600, 500),(1100, 400)],
+        'carrots': [Carrot(600, 400),Carrot(300, 600), Carrot(800, 100),Carrot(1000, 500), Carrot(200, 300), Carrot(500, 100),Carrot(700, 600), Carrot(400, 300), Carrot(900, 400),Carrot(1100, 200)],
         'cutscene': 'cutscene-3',
     },
 ]
