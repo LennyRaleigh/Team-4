@@ -1,0 +1,435 @@
+body {
+    background-color: rgb(31, 88, 104);
+    font-family: "Open Sans", sans-serif;
+    margin: 0;
+    padding: 0;
+    color: white;
+}
+
+
+/* Dropdown menu */
+
+.dropbtn {
+    background-color: #4CAF50;
+    color: white;
+
+    padding: 16px;
+
+    font-size: 22px;
+
+    border: none;
+
+    cursor: pointer;
+
+    border-radius: 8px;
+}
+
+
+.dropdown {
+    position: fixed;
+
+    top: 20px;
+    right: 20px;
+
+    display: inline-block;
+
+    z-index: 1000;
+}
+
+
+.dropdown-content {
+    display: none;
+
+    position: absolute;
+
+    right: 0;
+
+    background-color: white;
+
+    min-width: 180px;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+
+.dropdown-content a {
+    display: block;
+
+    padding: 14px 18px;
+
+    color: black;
+
+    text-decoration: none;
+
+    font-size: 18px;
+}
+
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
+
+/* Gameplay header */
+
+.gameplay-header {
+    max-width: 1100px;
+
+    margin: 100px auto 50px;
+
+    padding: 45px 30px;
+
+    text-align: center;
+
+    background-color: rgb(54, 111, 128);
+
+    border: 3px solid white;
+
+    border-radius: 15px;
+}
+
+
+.gameplay-header h1 {
+    color: rgb(255, 230, 120);
+
+    font-size: 55px;
+
+    margin-top: 0;
+}
+
+
+.gameplay-header p {
+    font-size: 20px;
+
+    line-height: 1.6;
+}
+
+
+/* Levels */
+
+.levels-section {
+    max-width: 1150px;
+
+    margin: 40px auto;
+
+    padding: 20px;
+}
+
+
+.levels-section > h2 {
+    text-align: center;
+
+    color: rgb(255, 230, 120);
+
+    font-size: 40px;
+
+    margin-bottom: 40px;
+}
+
+
+/* Individual level */
+
+.level-box {
+    display: flex;
+
+    align-items: center;
+
+    gap: 40px;
+
+    margin-bottom: 50px;
+
+    padding: 30px;
+
+    background-color: rgb(54, 111, 128);
+
+    border: 3px solid white;
+
+    border-radius: 15px;
+}
+
+
+.level-box.reverse {
+    flex-direction: row-reverse;
+}
+
+
+/* Level image */
+
+.level-image {
+    flex: 1;
+}
+
+
+.level-image img {
+    width: 100%;
+
+    height: 350px;
+
+    object-fit: cover;
+
+    border: 3px solid white;
+
+    border-radius: 12px;
+
+    background-color: rgb(31, 88, 104);
+}
+
+
+/* Level information */
+
+.level-text {
+    flex: 1;
+
+    text-align: left;
+}
+
+
+.level-text h2 {
+    color: rgb(255, 230, 120);
+
+    font-size: 34px;
+
+    margin-top: 0;
+}
+
+
+.level-text h3 {
+    color: rgb(255, 230, 120);
+
+    font-size: 22px;
+}
+
+
+.level-text p {
+    font-size: 18px;
+
+    line-height: 1.6;
+}
+
+
+/* Difficulty */
+
+.difficulty {
+    margin-top: 20px;
+
+    padding: 12px;
+
+    background-color: rgb(31, 88, 104);
+
+    border: 2px solid rgb(255, 230, 120);
+
+    border-radius: 8px;
+
+    font-size: 18px;
+}
+
+
+.difficulty strong {
+    color: rgb(255, 230, 120);
+
+    margin-right: 10px;
+}
+
+
+/* Enemies section */
+
+.enemies-section {
+    max-width: 1150px;
+
+    margin: 70px auto;
+
+    padding: 30px;
+}
+
+
+.enemies-section > h2 {
+    text-align: center;
+
+    color: rgb(255, 230, 120);
+
+    font-size: 40px;
+}
+
+
+.enemy-intro {
+    max-width: 800px;
+
+    margin: 0 auto 40px;
+
+    text-align: center;
+
+    font-size: 19px;
+
+    line-height: 1.6;
+}
+
+
+/* Enemy boxes */
+
+.enemy-container {
+    display: flex;
+
+    gap: 30px;
+}
+
+
+.enemy-box {
+    flex: 1;
+
+    padding: 25px;
+
+    text-align: center;
+
+    background-color: rgb(54, 111, 128);
+
+    border: 3px solid white;
+
+    border-radius: 15px;
+}
+
+
+.enemy-box img {
+    width: 100%;
+
+    height: 220px;
+
+    object-fit: contain;
+
+    border: 3px solid white;
+
+    border-radius: 12px;
+
+    background-color: rgb(31, 88, 104);
+}
+
+
+.enemy-box h3 {
+    color: rgb(255, 230, 120);
+
+    font-size: 25px;
+}
+
+
+.enemy-box p {
+    font-size: 17px;
+
+    line-height: 1.5;
+}
+
+
+/* Enemy statistics */
+
+.enemy-stats {
+    background-color: rgb(31, 88, 104);
+
+    border: 2px solid rgb(255, 230, 120);
+
+    border-radius: 8px;
+
+    padding: 12px;
+
+    line-height: 1.8;
+}
+
+
+.enemy-stats strong {
+    color: rgb(255, 230, 120);
+}
+
+
+/* Enemy threat level */
+
+.enemy-box > strong {
+    display: block;
+
+    margin-top: 20px;
+
+    color: rgb(255, 230, 120);
+
+    font-size: 17px;
+}
+
+
+/* Mobile layout */
+
+@media (max-width: 800px) {
+
+    .gameplay-header {
+        margin: 90px 15px 30px;
+
+        padding: 30px 20px;
+    }
+
+
+    .gameplay-header h1 {
+        font-size: 42px;
+    }
+
+
+    .levels-section {
+        margin: 20px 15px;
+    }
+
+
+    .level-box {
+        flex-direction: column;
+
+        padding: 20px;
+
+        gap: 25px;
+    }
+
+
+    .level-box.reverse {
+        flex-direction: column;
+    }
+
+
+    .level-image {
+        width: 100%;
+    }
+
+
+    .level-image img {
+        height: 250px;
+    }
+
+
+    .level-text {
+        width: 100%;
+
+        text-align: center;
+    }
+
+
+    .level-text h2 {
+        font-size: 30px;
+    }
+
+
+    .enemy-container {
+        flex-direction: column;
+    }
+
+
+    .enemies-section {
+        margin: 30px 15px;
+
+        padding: 15px;
+    }
+
+}

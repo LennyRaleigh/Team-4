@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Game Name</title>
+
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="HomePage.css">
+
+</head>
+
+<body>
+
+    <!-- Navigation dropdown menu -->
+    <div class="dropdown">
+
+        <!-- Button that opens the dropdown -->
+        <button class="dropbtn">▼</button>
+
+        <!-- Dropdown links -->
+        <div class="dropdown-content">
+
+            <a href="HomePage.html">Home</a>
+            <a href="AboutUs.html">About Us</a>
+            <a href="ContactUs.html">Contact Us</a>
+            <a href="Gameplay.html">Gameplay</a>
+            <a href="Merch.html">Merch</a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Main game section -->
+    <section class="hero">
+
+        <!-- Game image -->
+        <div class="hero-image">
+
+            <img src="Level2.png">
+
+        </div>
+
+
+        <!-- Game information -->
+        <div class="hero-info">
+
+            <h1>Borris the Bunny</h1>
+
+            <h2>Version &nbsp; Pc</h2>
+
+            <h3>Select edition</h3>
+
+
+            <!-- Game editions -->
+            <div class="editions">
+
+                <div class="edition"
+                     onclick="selectEdition('Digital', 10)">
+
+                    <span>Digital</span>
+
+                    <strong>€10</strong>
+
+                </div>
+
+
+                <div class="edition"
+                     onclick="selectEdition('Digital Deluxe', 15)">
+
+                    <span>Digital Deluxe</span>
+
+                    <strong>€15</strong>
+
+                </div>
+
+
+                <div class="edition"
+                     onclick="selectEdition('Collector\'s Edition', 20)">
+
+                    <span>Collector's Edition</span>
+
+                    <strong>€20</strong>
+
+                </div>
+
+
+                <div class="edition"
+                     onclick="selectEdition('Ultimate Edition', 25)">
+
+                    <span>Ultimate Edition</span>
+
+                    <strong>€25</strong>
+
+                </div>
+
+
+                <div class="edition"
+                     onclick="selectEdition('Legendary Edition', 30)">
+
+                    <span>Legendary Edition</span>
+
+                    <strong>€30</strong>
+
+                </div>
+
+
+                <div class="edition"
+                     onclick="selectEdition('Physical Edition', 12)">
+
+                    <span>Physical Edition</span>
+
+                    <strong>€12</strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- Selected edition -->
+            <div id="selectedEdition" class="selected-edition">
+
+                <p>
+                    Select an edition above
+                </p>
+
+            </div>
+
+
+            <!-- Add to cart -->
+            <button
+                id="addGameButton"
+                class="add-game-button"
+                onclick="addSelectedEdition()"
+                disabled>
+
+                Add to Cart
+
+            </button>
+
+
+            <!-- Direct download -->
+            <h5>
+                Direct Download (excecutable file eventually)
+            </h5>
+
+            <button class="download-button">
+
+                Direct Download
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- PEGI rating -->
+    <section class="game-rating">
+
+        <img src="Pegi.webp">
+
+    </section>
+
+
+    <!-- About game and Deluxe Edition -->
+    <section class="information">
+
+        <!-- About game -->
+        <div class="info-box">
+
+            <h4>About game</h4>
+
+            <p>
+                Join Boris on his quest to rescue his family from the grasps
+                of the evil farmer who have them held hostage in his barn.
+                Dash through the farm battleing his army of evil animals
+                and collecting valuable carrots to help him on his journey.
+                With a variety of levels and challenges, Boris will need to
+                use all his skills to overcome the obstacles in his path
+                and save his family.
+            </p>
+
+        </div>
+
+
+        <!-- Deluxe Edition -->
+        <div class="info-box">
+
+            <h4>Deluxe Edition:</h4>
+
+            <ul>
+
+                <li>Free piece of merch of your choice</li>
+                <li>A2 size poster</li>
+                <li>Meet & Greet</li>
+                <li>Early access</li>
+                <li>Signed Merch</li>
+
+            </ul>
+
+        </div>
+
+    </section>
+
+
+    <!-- Feature image -->
+    <section class="feature-image">
+
+        <img src="Level1.png">
+
+    </section>
+
+
+    <!-- Game details -->
+    <section class="details">
+
+        <!-- Supported platforms -->
+        <div class="details-box">
+
+            <h4>Supported Platforms</h4>
+
+            <ul>
+
+                <li>Virtual Boy</li>
+                <li>Smart Fridge</li>
+                <li>ONLY WINDOWS 11</li>
+                <li>Sega Genesis</li>
+                <li>Xbox 360</li>
+                <li>DIGITAL PS 5</li>
+
+            </ul>
+
+        </div>
+
+
+        <!-- Number of players -->
+        <div class="details-box players">
+
+            <h4>
+                Number of Players
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                Single Player (1)
+            </h4>
+
+        </div>
+
+    </section>
+
+
+    <!-- Reviews -->
+    <section class="reviews">
+
+        <h2>What Players Think</h2>
+
+
+        <!-- Existing reviews -->
+        <div class="review-list">
+
+
+            <!-- Review 1 -->
+            <div class="review">
+
+                <h3>⭐</h3>
+
+                <p>
+                    "Really difficult game, I keep on getting killed by the pigs!!"
+                </p>
+
+                <strong>Alfie</strong>
+
+            </div>
+
+
+            <!-- Review 2 -->
+            <div class="review">
+
+                <h3>⭐⭐⭐⭐⭐</h3>
+
+                <p>
+                    "This is the best game ever. Tetris finally has a competitor."
+                </p>
+
+                <strong>Michael</strong>
+
+            </div>
+
+
+            <!-- Review 3 -->
+            <div class="review">
+
+                <h3>⭐⭐⭐⭐⭐</h3>
+
+                <p>
+                    "Please hire me!! I need a job."
+                </p>
+
+                <strong>Vidhur</strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- Review form -->
+        <div class="review-form">
+
+            <h2>Leave a Review</h2>
+
+
+            <!-- Web3Forms -->
+            <form
+                id="reviewForm"
+                action="https://api.web3forms.com/submit"
+                method="POST"
+            >
+
+                <!-- Web3Forms access key -->
+                <input
+                    type="hidden"
+                    name="access_key"
+                    value="f4db3355-f436-4d00-a3da-b60b1e99d50a"
+                >
+
+
+                <!-- Email subject -->
+                <input
+                    type="hidden"
+                    name="subject"
+                    value="New Game Review"
+                >
+
+
+                <!-- Name -->
+                <label for="reviewName">
+                    Your Name
+                </label>
+
+                <input
+                    type="text"
+                    id="reviewName"
+                    name="name"
+                    placeholder="Enter your name"
+                    required
+                >
+
+
+                <!-- Email -->
+                <label for="reviewEmail">
+                    Your Email
+                </label>
+
+                <input
+                    type="email"
+                    id="reviewEmail"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                >
+
+
+                <!-- Rating -->
+                <label for="reviewRating">
+                    Rating
+                </label>
+
+                <select
+                    id="reviewRating"
+                    name="rating"
+                    required
+                >
+
+                    <option value="">
+                        Choose a rating
+                    </option>
+
+                    <option value="5 Stars">
+                        ⭐⭐⭐⭐⭐
+                    </option>
+
+                    <option value="4 Stars">
+                        ⭐⭐⭐⭐
+                    </option>
+
+                    <option value="3 Stars">
+                        ⭐⭐⭐
+                    </option>
+
+                    <option value="2 Stars">
+                        ⭐⭐
+                    </option>
+
+                    <option value="1 Star">
+                        ⭐
+                    </option>
+
+                </select>
+
+
+                <!-- Review -->
+                <label for="reviewText">
+                    Your Review
+                </label>
+
+                <textarea
+                    id="reviewText"
+                    name="message"
+                    placeholder="Tell us what you think about the game..."
+                    rows="6"
+                    required
+                ></textarea>
+
+
+                <!-- Submit button -->
+                <button
+                    type="submit"
+                    class="review-submit">
+
+                    Submit Review
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <!-- JavaScript -->
+    <script src="HomePage.js"></script>
+
+</body>
+
+</html>

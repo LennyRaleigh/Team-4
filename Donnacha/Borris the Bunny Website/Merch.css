@@ -1,0 +1,515 @@
+/* Makes the width and height include padding and borders */
+* {
+    box-sizing: border-box;
+}
+
+
+/* Main page styling */
+body {
+    background-color: rgb(31, 88, 104);
+    font-family: "Open Sans", sans-serif;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+    color: white;
+}
+
+
+/* Main page heading */
+h1 {
+    font-size: 42px;
+    margin-bottom: 30px;
+}
+
+
+/* Styles the section headings */
+h2,
+h3 {
+    color: rgb(255, 230, 120);
+}
+
+
+/* Adds space above the main section headings */
+h2 {
+    margin-top: 30px;
+}
+
+
+/* Styles the product category headings */
+h3 {
+    margin-top: 50px;
+    font-size: 28px;
+}
+
+
+/* Search and cart */
+
+.shop-controls {
+    /* Places the search bar and cart button next to each other */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+
+#searchBar {
+    /* Styles the product search bar */
+    width: 350px;
+    padding: 14px;
+    border: 3px solid white;
+    border-radius: 25px;
+    font-size: 18px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+
+.cart-button {
+    /* Creates the circular shopping cart button */
+    background-color: rgb(255, 230, 120);
+    color: black;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+.cart-button:hover {
+    /* Makes the cart button larger when hovered over */
+    background-color: white;
+    transform: scale(1.08);
+}
+
+
+/* Category buttons */
+
+.category-buttons {
+    /* Places the category buttons in a row */
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 30px 0 40px;
+}
+
+
+.category-buttons button {
+    /* Styles the product category buttons */
+    background-color: rgb(255, 230, 120);
+    color: black;
+    border: none;
+    padding: 14px 22px;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+
+.category-buttons button:hover {
+    /* Makes the category button larger when hovered over */
+    background-color: white;
+    transform: scale(1.05);
+}
+
+
+/* Product sections */
+
+.product-section {
+    /* Adds space between each product category */
+    margin-bottom: 50px;
+}
+
+
+.products {
+    /* Places the products next to each other and allows them to wrap */
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+
+/* Product */
+
+.product {
+    /* Creates the box around each product */
+    width: 220px;
+    background-color: rgb(54, 111, 128);
+    border: 3px solid white;
+    border-radius: 12px;
+    padding: 15px;
+    transition: transform 0.3s;
+    box-sizing: border-box;
+}
+
+
+.product:hover {
+    /* Makes the product box slightly larger when hovered over */
+    transform: scale(1.05);
+}
+
+
+.product img {
+    /* Controls the size and appearance of product images */
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+
+/* Make bunny images bigger */
+
+#bunnies + .products .product {
+    /* Makes the bunny product boxes wider */
+    width: 240px;
+}
+
+
+#bunnies + .products .product img {
+    /* Makes the bunny images larger */
+    width: 220px;
+    height: 220px;
+}
+
+
+.product h4 {
+    /* Styles the product names */
+    font-size: 20px;
+    margin: 12px 0 5px;
+    color: white;
+}
+
+
+.product p {
+    /* Styles the product prices */
+    font-size: 18px;
+    font-weight: bold;
+    color: rgb(255, 230, 120);
+    margin: 5px;
+}
+
+
+/* Add to cart */
+
+.product button {
+    /* Styles the Add to Cart buttons */
+    background-color: rgb(255, 230, 120);
+    color: black;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+
+.product button:hover {
+    /* Changes the Add to Cart button when hovered over */
+    background-color: white;
+}
+
+
+/* Cart */
+
+.cart {
+    /* Hides the cart until the user opens it */
+    display: none;
+
+    /* Keeps the cart fixed in the top right corner */
+    position: fixed;
+    top: 70px;
+    right: 20px;
+
+    width: 400px;
+    max-width: calc(100% - 40px);
+
+    max-height: calc(100vh - 100px);
+
+    /* Allows the cart to scroll if it becomes too tall */
+    overflow-y: auto;
+
+    background-color: white;
+    color: black;
+
+    padding: 25px;
+
+    border-radius: 15px;
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+
+    z-index: 999;
+
+    box-sizing: border-box;
+}
+
+
+.cart h2 {
+    /* Styles the cart heading */
+    margin-top: 0;
+    color: rgb(31, 88, 104);
+    font-size: 32px;
+}
+
+
+.cart-number {
+    /* Styles the number of items shown in the cart */
+    font-size: 20px;
+    margin-bottom: 25px;
+}
+
+
+.cart-item {
+    /* Separates each item in the cart */
+    border-bottom: 1px solid #ccc;
+    padding: 15px 0;
+}
+
+
+.cart-item p {
+    /* Styles the information shown for each cart item */
+    margin: 5px;
+    color: black;
+    font-size: 18px;
+}
+
+
+.cart-item button {
+    /* Styles the Remove button */
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 9px 15px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+
+.cart-item button:hover {
+    /* Makes the Remove button darker when hovered over */
+    background-color: #c9302c;
+}
+
+
+/* Cart buttons */
+
+.cart-buttons {
+    /* Places the checkout and close buttons next to each other */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+
+.checkout-button {
+    /* Styles the Checkout button */
+    display: inline-block;
+
+    background-color: rgb(255, 230, 120);
+    color: black;
+
+    padding: 14px 30px;
+
+    border-radius: 25px;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    box-sizing: border-box;
+}
+
+
+.checkout-button:hover {
+    /* Changes the Checkout button when hovered over */
+    background-color: rgb(31, 88, 104);
+    color: white;
+}
+
+
+.close-cart-button {
+    /* Styles the Close Cart button */
+    background-color: rgb(31, 88, 104);
+    color: white;
+
+    border: none;
+
+    padding: 14px 25px;
+
+    border-radius: 25px;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+    box-sizing: border-box;
+}
+
+
+.close-cart-button:hover {
+    /* Changes the Close Cart button when hovered over */
+    background-color: rgb(54, 111, 128);
+}
+
+
+/* Dropdown */
+
+.dropbtn {
+    /* Styles the dropdown button */
+    background-color: #4CAF50;
+    color: white;
+
+    padding: 16px;
+
+    font-size: 22px;
+
+    border: none;
+
+    cursor: pointer;
+
+    border-radius: 8px;
+}
+
+
+.dropdown {
+    /* Keeps the dropdown in the top right corner */
+    position: fixed;
+
+    top: 20px;
+    right: 20px;
+
+    display: inline-block;
+
+    z-index: 1000;
+}
+
+
+.dropdown-content {
+    /* Hides the navigation menu until it is hovered over */
+    display: none;
+
+    position: absolute;
+
+    right: 0;
+
+    background-color: white;
+
+    min-width: 180px;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+
+.dropdown-content a {
+    /* Styles the links inside the dropdown */
+    display: block;
+
+    padding: 14px 18px;
+
+    color: black;
+
+    text-decoration: none;
+
+    font-size: 18px;
+}
+
+
+.dropdown-content a:hover {
+    /* Changes the dropdown link background when hovered over */
+    background-color: #f1f1f1;
+}
+
+
+.dropdown:hover .dropdown-content {
+    /* Shows the dropdown menu when the mouse is over it */
+    display: block;
+}
+
+
+.dropdown:hover .dropbtn {
+    /* Changes the dropdown button when hovered over */
+    background-color: #3e8e41;
+}
+
+
+/* Mobile */
+
+@media (max-width: 800px) {
+
+    /* Changes the shop controls into a column on smaller screens */
+    .shop-controls {
+        flex-direction: column;
+    }
+
+    /* Makes the search bar fit smaller screens */
+    #searchBar {
+        width: 90%;
+        max-width: 350px;
+    }
+
+    /* Keeps the cart inside the screen on smaller devices */
+    .cart {
+        right: 10px;
+        width: 400px;
+        max-width: calc(100% - 20px);
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    /* Reduces the gap between products on very small screens */
+    .products {
+        gap: 15px;
+    }
+
+    /* Makes the product boxes fit smaller screens */
+    .product {
+        width: 90%;
+        max-width: 300px;
+    }
+
+    /* Makes the product images larger while keeping them inside the box */
+    .product img {
+        width: 250px;
+        max-width: 100%;
+        height: 250px;
+    }
+
+    /* Makes the bunny product boxes fit smaller screens */
+    #bunnies + .products .product {
+        width: 90%;
+        max-width: 300px;
+    }
+
+    /* Makes the bunny images fit smaller screens */
+    #bunnies + .products .product img {
+        width: 250px;
+        max-width: 100%;
+        height: 250px;
+    }
+
+}
