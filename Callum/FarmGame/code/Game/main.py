@@ -79,7 +79,7 @@ LEVELS = [
         'enemy_attack': "farmer.attack.sprite.sheet3.png",
         'enemy_sound': farm_attack,
         'background_music': None,
-        'carrots': [Carrot(600, 400),Carrot(300, 600), Carrot(800, 100),Carrot(1000, 500), Carrot(200, 300), Carrot(500, 100),Carrot(700, 600), Carrot(400, 300), Carrot(900, 400),Carrot(1100, 200)],
+        'carrots': [(600, 400),(300, 600), (800, 100),(1000, 500), (200, 300), (500, 100),(700, 600), (400, 300), (900, 400),(1100, 200)],
         'cutscene': 'cutscene-3',
     },
 ]

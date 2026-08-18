@@ -55,12 +55,11 @@ class Enemies(Creature):
                     if pygame.sprite.collide_mask(sprite1, sprite2):
                         diff_x = sprite1.rect.centerx - sprite2.rect.centerx
                         diff_y = sprite1.rect.centery - sprite2.rect.centery
-                        #if diff_x != 0:
-                        #    sprite1.rect.centerx += 1 if diff_x > 0 else -1
-                        #if diff_y != 0:
-                        #    sprite1.rect.centery += 1 if diff_y > 0 else -1
+
                         sprite1.rect.centerx += (diff_x)**-1
                         sprite1.rect.centery += (diff_y)**-1
+
+
     def take_damage(self, amount):
         self.health -= amount
         self.hit_flash_timer = 8
@@ -75,6 +74,7 @@ class Enemies(Creature):
             bar_width = 50
             bar_x = self.rect.centerx - bar_width // 2
             bar_y = self.rect.top - 12
+            
             pygame.draw.rect(surface, (60, 0, 0), (bar_x, bar_y, bar_width, 6), border_radius=3)
             health_width = max(0, (self.health / self.max_health) * bar_width)
             pygame.draw.rect(surface, (220, 40, 40), (bar_x, bar_y, health_width, 6), border_radius=3)
